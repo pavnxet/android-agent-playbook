@@ -15,7 +15,7 @@ robolectric = "4.16"          # catalogued for instrumented-free UI tests; unuse
 # material3 is NOT moved by the Compose BOM: pin it. M3 Expressive APIs are internal in 1.4.x.
 # 1.5.0-rc01 requires compileSdk 37 and AGP >= 9.1 - which is what fixes the whole toolchain chain.
 material3 = "1.5.0-rc01"
-turbine = "1.2.0"
+turbine = "1.2.1"
 androidxCore = "1.19.1"
 androidxActivity = "1.13.0"
 androidxLifecycle = "2.11.0"

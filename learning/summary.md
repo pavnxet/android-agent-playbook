@@ -77,3 +77,13 @@ Fixed in the starter, and the same error corrected in the playbook: Part 6.1/6.2
 added with the verbatim failure. `verify-starter` is now green: testDebugUnitTest + assembleDebug on
 AGP 9.3.2 / Kotlin 2.3.0 / KSP 2.3.6 / Hilt 2.59.2 / compileSdk 37 / Nav3 1.2.0 / Room 2.8.3.
 INCIDENT-011, ADR-022 logged.
+
+## S-20261115-0012 · DONE · field report folded back in
+An agent that shipped Focus Timer 1.0/2.0 with this repo filed a report: structural rules held, every
+version needed re-verification, two toolchain traps were missing, and the repo "contained no code that
+builds" (true of v1.x; starter/ landed in v2.0). Verified all 14 pins against Google Maven / Maven
+Central / services.gradle.org and bumped the starter to AGP 9.5.1 / Gradle 9.9.1 / Kotlin 2.4.21 /
+material3 1.5.0-rc01 / Nav3 1.2.1 / Room 2.8.5 - CI green. Two of the report's own claims were wrong
+(AGP 9.3.2 does exist; Kotlin latest is 2.4.21, not 2.3.21). Added INCIDENT-012..015, PLAYBOOKS P6,
+check_versions.py + verify-versions.yml, README/starter agreement check in verify_repo.py, and the
+defaults-vs-available split. ADR-023/024.

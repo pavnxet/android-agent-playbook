@@ -162,3 +162,19 @@ The version catalog and every module must not apply `org.jetbrains.kotlin.androi
 `org.jetbrains.kotlin.plugin.compose`; JVM-only modules keep `org.jetbrains.kotlin.jvm`.
 **Why**: AGP 9 fails the build outright (INCIDENT-011). **Cost**: none - there is no replacement to
 apply. **Guard**: `starter/` is the compiled proof; if it builds, the wiring is right.
+
+## ADR-023 · The baseline table is verified weekly by a script, not by memory · ACCEPTED 2026-11-15
+`scripts/check_versions.py` fetches `maven-metadata.xml` for every row of the README baseline table and
+fails if a pinned version is unpublished or a newer stable exists. `.github/workflows/verify-versions.yml`
+runs it weekly and on demand. The table also carries a "hypothesis, not a pin" warning, and the chain
+`material3 -> compileSdk -> AGP -> Gradle -> built-in Kotlin` is stated once, in one line.
+**Why**: a real build reported that every structural rule held while every number needed re-checking.
+A table that cannot rot is worth more than a table that is right today.
+**Cost**: one network call per row per week. **Guard**: the weekly workflow plus `starter/` compiling the
+same numbers.
+
+## ADR-024 · Defaults vs available, stated separately · ACCEPTED 2026-11-15
+The README separates what every app gets (Compose, Material 3, Nav 3, one StateFlow per screen, injected
+dispatchers) from what an app adds when it needs it (Room, DataStore, Retrofit, Hilt, WorkManager).
+**Why**: a four-screen timer read the stack as a checklist and nearly installed Room, Retrofit and Hilt.
+**Cost**: none.

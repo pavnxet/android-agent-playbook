@@ -76,18 +76,43 @@ cd /path/to/repo && ./scripts/setup.sh
 
 ## Verified baseline stack
 
+Every row below was read from Google Maven / Maven Central / services.gradle.org on **15 November 2026**, and the whole set is compiled and tested by [`starter/`](starter/) in CI on every change. That is the difference between this table and a wish list: if it stops building, the badge goes red.
+
 | Layer | Version | Note |
 |---|---|---|
-| AGP / Gradle | 9.3.2 / 9.7.1 | AGP 9 requires KSP ≥ 2.3.6 and Hilt ≥ 2.59.2 |
-| Kotlin | 2.3.0+ | Compose compiler ships with the Kotlin plugin |
-| compileSdk / minSdk | 37 / 24 | Fall back to `compileSdk 36` if a library lacks API 37 metadata |
-| Compose BOM | 2026.x | Pin the BOM, never individual Compose versions |
-| UI / state | Compose + Material 3 | Single Activity, `enableEdgeToEdge()` |
-| Navigation | Navigation 3 (`@Serializable NavKey`) | Nav 2.8.x only for legacy code |
-| DI / codegen | Hilt, KSP | No kapt in new code |
-| Data | Room 2.8.3, DataStore 1.2.0 | Room is the source of truth |
-| Network | Retrofit 2.11 + OkHttp 4.12 | kotlinx.serialization converter |
-| Testing | Robolectric 4.16 + Turbine 1.2.0 | JVM-first; no emulator for unit tests |
+| AGP / Gradle | **9.5.1 / 9.9.1** | AGP 9 requires Gradle 9.x and **forbids** `org.jetbrains.kotlin.android` (built-in Kotlin) |
+| Kotlin | **2.4.21** | Compose compiler and serialization plugins track this version |
+| compileSdk / targetSdk | **37 / 37** | 37 is required by material3 1.5.x; targetSdk may stay one release behind (36) |
+| minSdk | 24 | unchanged |
+| Compose BOM | **2026.09.00** | does **not** move material3 — pin it explicitly |
+| material3 | **1.5.0-rc01** | M3 Expressive (`MaterialExpressiveTheme`, `MotionScheme`) is `internal` in 1.4.x |
+| navigation3 | **1.2.1** | |
+| activity-compose / lifecycle | **1.13.0 / 2.11.0** | |
+| core-ktx | **1.19.1** | |
+| Room | **2.8.5** | needs KSP ≥ 2.3.6 |
+| KSP / Hilt | **2.3.14 / 2.60.1** | AGP 9 floors: KSP ≥ 2.3.6, Hilt ≥ 2.59.2 |
+| WorkManager / Glance | 2.12.0 / 1.2.0 | |
+| Turbine / Robolectric | 1.2.1 / 4.16 | |
+
+> **Read this as a hypothesis, not a pin.** Every row was true on the date above, and a date is all it is. Re-verify with `maven-metadata.xml` before pinning (recipe in `learning/PLAYBOOKS.md`), and remember that `material3` alone can force a compileSdk *and* an AGP upgrade.
+
+### The chain that actually decides your toolchain
+
+```
+M3 Expressive -> material3 1.5.x -> compileSdk 37 -> AGP >= 9.1 -> Gradle 9.x -> built-in Kotlin
+```
+
+Pick any point in that chain and the ones before it are forced. An agent that picks `material3 1.4.x` to stay on compileSdk 36 gets `MaterialExpressiveTheme` as `internal` and cannot compile; an agent that pins 1.5.x on AGP 8.13 gets `requires Android Gradle plugin 9.1.0 or higher`.
+
+### Defaults vs available
+
+The stack above is what `starter/` proves. The template is a **1-4 screen app**, so not every line is a default:
+
+| Always | When the app needs it |
+|---|---|
+| Compose + Material 3, Navigation 3, one `StateFlow<UiState>` per screen, injected dispatchers | Room (persisted, queryable data), DataStore (settings), Retrofit/OkHttp (a network API), Hilt (a graph worth injecting), WorkManager (deferrable work) |
+
+A four-screen timer does not need Room, Retrofit or Hilt. Adding them "because the stack says so" is the same failure as inventing a version number.
 
 ## Engineering non-negotiables
 
@@ -128,14 +153,19 @@ The rule that makes it work: **recall before exploring**. Before reading code to
 ## Verify it yourself
 
 ```bash
-python3 scripts/verify_repo.py               # links, anchors, fences, YAML parse, shell, installer
+python3 scripts/verify_repo.py               # links, anchors, fences, YAML, shell, installer, README/starter agreement
+python3 scripts/check_versions.py            # every README pin still published (network; weekly in CI)
 python3 scripts/check_markdown_fences.py     # fence balance + no LaTeX/OCR artifacts in code
 python3 scripts/scan_sensitive.py --doctor   # hooks + denylist present
 bash -n scripts/*.sh                         # POSIX syntax
 cd starter && ./gradlew testDebugUnitTest    # the baseline stack actually compiles
 ```
 
-Three CI workflows enforce this: `lint-repo.yml` (shell, executable bits, fences, links, self-check), `verify-starter.yml` (the starter app builds and tests), and `secret-scan.yml` (sensitive-content scan plus Gitleaks).
+Four CI workflows enforce this: `lint-repo.yml` (shell, executable bits, fences, links, self-check), `verify-starter.yml` (the starter app builds and tests), `verify-versions.yml` (weekly drift check of every pinned version against Maven metadata), and `secret-scan.yml` (sensitive-content scan plus Gitleaks).
+
+### Field report
+
+[`docs/`](docs/) content is shaped by a report from the agent that built **Focus Timer 1.0 and 2.0** with this repository in context: the structural rules held, every version number needed re-verification, and two toolchain traps (AGP 9's built-in Kotlin, `material3 1.5` forcing compileSdk 37 + AGP 9.1) were missing. That feedback produced the verified table above, the chain line, Part 6.6, Part 10.1, four incident entries and `scripts/check_versions.py`.
 
 ## Companion ecosystem
 

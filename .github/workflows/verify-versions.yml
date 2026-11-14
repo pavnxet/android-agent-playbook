@@ -1,0 +1,32 @@
+name: Verify Baseline Versions
+
+# Weekly drift check: every pin in the README baseline table must still be published.
+# A stale table is the failure mode this repository exists to prevent (ADR-023).
+on:
+  schedule:
+    - cron: '0 6 * * 1'      # Mondays, 06:00 UTC
+  workflow_dispatch:
+  push:
+    paths:
+      - 'README.md'
+      - 'scripts/check_versions.py'
+      - '.github/workflows/verify-versions.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  versions:
+    name: README pins vs published metadata
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      - name: Check every pinned version
+        run: python3 scripts/check_versions.py

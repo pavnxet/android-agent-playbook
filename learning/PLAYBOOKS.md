@@ -30,3 +30,16 @@
 1. Does it change a decision? -> `DECISIONS.md` (ADR, status).
 2. Is it a pitfall worth never rediscovering? -> `BRIEF.md` top pitfalls + `learning.md` area.
 3. Is it a one-off event? -> `summary.md` entry (append-only), `INCIDENTS.md` if it caused damage.
+
+## P6 · Version archaeology in three minutes
+1. List published versions:
+   `curl -s https://dl.google.com/dl/android/maven2/<group/path>/<artifact>/maven-metadata.xml | tr '<' '\n' | grep '^version>' | tail -12`
+   (Maven Central for Kotlin, KSP, Hilt, Coroutines; `services.gradle.org/versions/current` for Gradle.)
+2. Pick the highest stable (ignore alpha/beta/rc unless a feature needs it), then read its AAR metadata -
+   this is what tells you the required compileSdk and AGP:
+   `unzip -p <artifact>.aar META-INF/com/android/build/gradle/aar-metadata.properties`
+3. Confirm the API you are about to call actually exists:
+   `javap -classpath classes.jar androidx.compose.material3.MaterialThemeKt` (or the class in question).
+   This one step would have caught both API-name errors in INCIDENT-015.
+
+`scripts/check_versions.py` automates step 1 for every row of the README table; it runs weekly in CI.

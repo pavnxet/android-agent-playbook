@@ -369,6 +369,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      - name: Install Android SDK packages
+        run: |
+          set -e
+          SDKM="$(ls -d "${ANDROID_HOME:-$ANDROID_SDK_ROOT}"*/cmdline-tools/*/bin/sdkmanager | head -1)"
+          "$SDKM" "platform-tools" "platforms;android-37.0" "build-tools;36.0.0"
       - uses: gradle/actions/setup-gradle@v6
       - name: Unit tests and lint
         run: ./gradlew testDebugUnitTest lintDebug --stacktrace

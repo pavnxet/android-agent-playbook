@@ -13,6 +13,10 @@ Native Android app in Kotlin. Multi-module, Single Activity, Compose, Material 3
 - Room, DataStore, Retrofit + OkHttp, kotlinx.serialization
 - Navigation 3 (NavDisplay + @Serializable NavKey), Coroutines/Flow
 
+# The dependency chain that decides the toolchain (playbook Part 6.6):
+#   M3 Expressive -> material3 1.5.x -> compileSdk 37 -> AGP >= 9.1 -> Gradle 9.x -> built-in Kotlin
+# material3 is NOT moved by the Compose BOM - pin it (1.5.0-rc01 as of 15 Nov 2026).
+
 ## Modules
 - :app - Application, MainActivity, top-level NavDisplay, DI entry points
 - :core:model (pure JVM), :core:data, :core:database, :core:network
@@ -46,3 +50,7 @@ Native Android app in Kotlin. Multi-module, Single Activity, Compose, Material 3
 - Call bare gradle; always the wrapper
 - Commit keystores, local.properties or secrets
 - Add -keep rules before running :app:analyzeReleaseR8Config
+- Apply `org.jetbrains.kotlin.android` on AGP 9+ - Kotlin is built in and the plugin fails the build
+- Use `kotlinOptions { jvmTarget = "17" }` on Kotlin 2.3+ - use `kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }`
+- Assume `sdkmanager "platforms;android-37"` exists - 37 ships as `platforms;android-37.0` / `37.1` / `37.2`
+- Pin `material3` by assuming the Compose BOM moves it - it does not; pin it, and know that 1.5.x forces compileSdk 37 + AGP >= 9.1

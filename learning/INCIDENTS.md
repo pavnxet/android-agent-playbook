@@ -111,3 +111,44 @@ The `KotlinAndroidProjectExtension` still exists because AGP registers it.
 corrected and a new Part 6.6 documents the rule with the verbatim error.
 **Lesson**: a starter that compiles is worth more than a version table. This contradiction sat in the
 playbook for six revisions and only a real build found it.
+
+## INCIDENT-012 · material3 1.5 forces compileSdk 37 and AGP 9.1 · 2026-11-15 · SEV-2 (two CI cycles)
+**Reported by**: the agent that built Focus Timer 1.0/2.0 with this playbook.
+**Symptom** (verbatim, in this order):
+`Dependency 'androidx.compose.material3:material3-ripple-android:1.5.0-rc01' requires libraries and
+applications that depend on it to compile against version 37 or later of the Android APIs. :app is
+currently compiled against android-36.` - and then, after bumping compileSdk:
+`... requires Android Gradle plugin 9.1.0 or higher. This build currently uses Android Gradle plugin 8.13.2.`
+**Cause**: AAR metadata inside material3 1.5.x. The Compose BOM does not move material3, so it has to be
+pinned - and pinning it silently upgrades the whole toolchain.
+**Fix**: compileSdk 37, AGP >= 9.1, Gradle 9.x, no kotlin-android plugin. The chain is now stated in the
+README and in both templates.
+**Time lost**: 2 CI cycles. **Lesson**: a single dependency can dictate the build system. The README now
+carries the chain as one line so an agent can reason forward instead of discovering it backwards.
+
+## INCIDENT-013 · SDK platform ids are versioned from 37 · 2026-11-15 · SEV-3 (one CI cycle)
+**Symptom**: `Warning: Failed to find package 'platforms;android-37'` followed by exit code 1.
+**Cause**: from API 37 the published platform packages are `platforms;android-37.0`, `37.1`, `37.2` -
+a versioned id, not the bare `android-37` every tutorial uses.
+**Fix**: install the versioned id, and call sdkmanager by absolute path (it is not on PATH on the runner):
+`SDKM="$(ls -d "${ANDROID_HOME:-$ANDROID_SDK_ROOT}"/cmdline-tools/*/bin/sdkmanager | head -1)"`.
+Also: `android-actions/setup-android@v3` still tries to install the long-removed `tools` package and
+fails; `@v4` works.
+**Time lost**: 1 CI cycle.
+
+## INCIDENT-014 · kotlinOptions string DSL is an error on Kotlin 2.3+ · 2026-11-15 · SEV-3
+**Symptom**: `Using 'jvmTarget: String' is an error. Please migrate to the compilerOptions DSL.`
+**Cause**: Kotlin 2.3 removed the `kotlinOptions { jvmTarget = "17" }` string form.
+**Fix**: `kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }`. Note this lives on the Kotlin
+extension that AGP 9 registers, not on the Android extension.
+**Time lost**: 1 CI cycle.
+
+## INCIDENT-015 · Two API names that no longer exist · 2026-11-15 · SEV-4
+**Symptom**: compile errors in code written from memory, not from a snippet file.
+**Cause**: `NotificationCompat.Builder.setChronometerCountdown(...)` is `setChronometerCountDown(...)`
+(capital D) - verified in androidx source; and Glance's `ActionCallback` is
+`androidx.glance.appwidget.action.ActionCallback` (declared in `RunCallbackAction.kt`), not
+`androidx.glance.action.ActionCallback`, which contains only `Action`, `ActionParameters`,
+`LambdaAction` and `StartActivityAction`. `updateAll` lives in `androidx.glance.appwidget`.
+**Fix**: recorded here so the next agent checks the signature instead of the blog post. `javap` on the
+AAR settles it in one call (PLAYBOOKS P6, step 3).

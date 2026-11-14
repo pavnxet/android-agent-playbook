@@ -177,6 +177,31 @@ if os.path.exists(script):
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+# ---------- 5b. README baseline vs starter catalog ----------
+readme_path = os.path.join(REPO, 'README.md')
+catalog_path = os.path.join(REPO, 'starter', 'gradle', 'libs.versions.toml')
+if os.path.exists(readme_path) and os.path.exists(catalog_path):
+    readme = open(readme_path, encoding='utf-8').read()
+    catalog = open(catalog_path, encoding='utf-8').read()
+    pairs = [
+        ('agp', r'^agp = "([^"]+)"'),
+        ('kotlin', r'^kotlin = "([^"]+)"'),
+        ('material3', r'^material3 = "([^"]+)"'),
+        ('navigation3', r'^navigation3 = "([^"]+)"'),
+        ('room', r'^room = "([^"]+)"'),
+        ('composeBom', r'^composeBom = "([^"]+)"'),
+        ('ksp', r'^ksp = "([^"]+)"'),
+        ('hilt', r'^hilt = "([^"]+)"'),
+    ]
+    for name, pattern in pairs:
+        match = re.search(pattern, catalog, re.M)
+        if not match:
+            fail(f'starter catalog is missing a version for {name}')
+            continue
+        version = match.group(1)
+        if version not in readme:
+            fail(f'README baseline table does not mention {name} {version} (starter pins it)')
+
 # ---------- 6. scanner semantics ----------
 scanner_path = os.path.join(REPO, 'scripts', 'scan_sensitive.py')
 if os.path.exists(scanner_path):
