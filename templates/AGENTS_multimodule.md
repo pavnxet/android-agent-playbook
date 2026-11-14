@@ -8,9 +8,10 @@
 Native Android app in Kotlin. Multi-module, Single Activity, Compose, Material 3.
 
 ## Stack
-- AGP 9.3.2, Gradle 9.7.1, Kotlin 2.3, KSP >= 2.3.6, Hilt >= 2.59.2
-- compileSdk 37 (fall back to 36 if a library lacks API 37 metadata), minSdk 24
-- Room, DataStore, Retrofit + OkHttp, kotlinx.serialization
+- AGP 9.5.1, Gradle 9.9.1, Kotlin 2.4.21, KSP 2.3.14, Hilt 2.60.1
+- compileSdk 37, minSdk 24 (material3 1.5.x requires 37)
+- Compose BOM 2026.09.00 + material3 1.5.0-rc01 (pinned - the BOM does not move it)
+- Room 2.8.5, DataStore, Retrofit + OkHttp, kotlinx.serialization - only if the app needs them
 - Navigation 3 (NavDisplay + @Serializable NavKey), Coroutines/Flow
 
 # The dependency chain that decides the toolchain (playbook Part 6.6):

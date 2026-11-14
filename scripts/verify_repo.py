@@ -177,6 +177,47 @@ if os.path.exists(script):
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+# ---------- 5a. one version everywhere ----------
+# The starter catalog is the single source of truth for versions (ADR-025). Every document
+# that states a version must state the same one, and known-stale strings must be gone.
+CATALOG = os.path.join(REPO, 'starter', 'gradle', 'libs.versions.toml')
+if os.path.exists(CATALOG):
+    catalog = open(CATALOG, encoding='utf-8').read()
+    canonical = {}
+    for key in ('agp', 'kotlin', 'material3', 'composeBom', 'navigation3', 'room', 'ksp', 'hilt'):
+        m = re.search(rf'^{key} = "([^"]+)"', catalog, re.M)
+        if m:
+            canonical[key] = m.group(1)
+
+    mirrors = [
+        ('PROMPTS.md', ['agp', 'kotlin', 'material3', 'composeBom', 'navigation3', 'room']),
+        ('templates/AGENTS.md', ['agp', 'kotlin', 'material3', 'composeBom', 'room']),
+        ('templates/AGENTS_multimodule.md', ['agp', 'kotlin', 'material3', 'composeBom', 'room']),
+        ('docs/CODE_SNIPPETS.md', ['agp', 'kotlin', 'material3', 'composeBom', 'room']),
+        ('starter/README.md', ['agp', 'kotlin', 'material3', 'composeBom', 'navigation3', 'room']),
+    ]
+    for rel_path, keys in mirrors:
+        full = os.path.join(REPO, rel_path)
+        if not os.path.exists(full):
+            fail(f'{rel_path} is missing')
+            continue
+        body = open(full, encoding='utf-8').read()
+        for key in keys:
+            if key in canonical and canonical[key] not in body:
+                fail(f'{rel_path}: does not state {key} {canonical[key]} (starter catalog pins it)')
+
+    # known-stale strings that must not come back
+    stale = ['agp = "9.3.2"', 'AGP 9.3.2, Gradle 9.7.1', 'Gradle 9.7.1, Kotlin 2.3',
+             'Compose BOM 2025.09.01', 'room = "2.8.3"', 'navigation3 = "1.2.0"']
+    for rel_path, _keys in mirrors + [('README.md', [])]:
+        full = os.path.join(REPO, rel_path)
+        if not os.path.exists(full):
+            continue
+        body = open(full, encoding='utf-8').read()
+        for bad in stale:
+            if bad in body:
+                fail(f'{rel_path}: stale version string {bad!r}')
+
 # ---------- 5b. README baseline vs starter catalog ----------
 readme_path = os.path.join(REPO, 'README.md')
 catalog_path = os.path.join(REPO, 'starter', 'gradle', 'libs.versions.toml')

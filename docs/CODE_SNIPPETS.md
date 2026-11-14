@@ -148,7 +148,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 @Composable
 fun AppNavDisplay() {
-    val backStack = rememberNavBackStack(Home)
+    // remember { mutableStateListOf } needs no serializers; rememberNavBackStack(configuration, ...)
+    // adds process-death restoration but requires a polymorphic NavKey serializers module.
+    val backStack = remember { mutableStateListOf<NavKey>(Home) }
     NavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
@@ -194,12 +196,13 @@ class OfflineFirstFeedRepository @Inject constructor(
 
 ```toml
 [versions]
-agp = "9.3.2"
-kotlin = "2.3.0"
-ksp = "2.3.6"          # AGP 9 requires >= 2.3.6
-hilt = "2.59.2"         # AGP 9 requires >= 2.59.2
-composeBom = "2025.09.01"
-room = "2.8.3"
+agp = "9.5.1"
+kotlin = "2.4.21"   # built into AGP 9: do not apply org.jetbrains.kotlin.android
+ksp = "2.3.14"         # AGP 9 requires >= 2.3.6
+hilt = "2.60.1"         # AGP 9 requires >= 2.59.2
+composeBom = "2026.09.00"
+material3 = "1.5.0-rc01"   # the BOM does not move material3 - pin it
+room = "2.8.5"
 retrofit = "2.11.0"
 
 [libraries]
@@ -274,7 +277,7 @@ kotlin.code.style=official
 android {
     signingConfigs {
         create("release") {
-            storeFile = System.getenv("KEYSTORE_PATH")?.let(::file)
+            storeFile = System.getenv("KEYSTORE_PATH")?.let { java.io.File(it) }
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
@@ -309,7 +312,7 @@ python3 <skill>/scripts/convert_pb_to_json.py app/build/reports/r8 tmp/keepradiu
 @Test
 fun `emits loading then content`() = runTest {
     val repo = FakeFeedRepository(items = listOf(sampleItem))
-    val vm = FeedViewModel(repo, SavedStateHandle(), StandardTestDispatcher(testScheduler))
+    val vm = FeedViewModel(repo)   // dispatchers are injected inside the ViewModel under test
 
     vm.uiState.test {
         assertTrue(awaitItem().isLoading)
@@ -510,9 +513,10 @@ dependencies {
 Native Android app in Kotlin. One module, Single Activity, Compose, Material 3.
 
 ## Stack
-- AGP 9.3.2, Gradle 9.7.1, Kotlin 2.3, KSP >= 2.3.6, Hilt >= 2.59.2
-- compileSdk 37 (fall back to 36 if a library lacks API 37 metadata), minSdk 24
-- Room, DataStore, Retrofit + OkHttp, kotlinx.serialization
+- AGP 9.5.1, Gradle 9.9.1, Kotlin 2.4.21, KSP 2.3.14, Hilt 2.60.1
+- compileSdk 37, minSdk 24 (material3 1.5.x requires 37)
+- Compose BOM 2026.09.00 + material3 1.5.0-rc01 (pinned - the BOM does not move it)
+- Room 2.8.5, DataStore, Retrofit + OkHttp, kotlinx.serialization - only if needed
 - Navigation 3 (NavDisplay + @Serializable NavKey), Coroutines/Flow
 
 ## Packages - com.<you>.<app>
@@ -555,9 +559,10 @@ Native Android app in Kotlin. One module, Single Activity, Compose, Material 3.
 Native Android app in Kotlin. Multi-module, Single Activity, Compose, Material 3.
 
 ## Stack
-- AGP 9.3.2, Gradle 9.7.1, Kotlin 2.3, KSP >= 2.3.6, Hilt >= 2.59.2
-- compileSdk 37 (fall back to 36 if a library lacks API 37 metadata), minSdk 24
-- Room, DataStore, Retrofit + OkHttp, kotlinx.serialization
+- AGP 9.5.1, Gradle 9.9.1, Kotlin 2.4.21, KSP 2.3.14, Hilt 2.60.1
+- compileSdk 37, minSdk 24 (material3 1.5.x requires 37)
+- Compose BOM 2026.09.00 + material3 1.5.0-rc01 (pinned - the BOM does not move it)
+- Room 2.8.5, DataStore, Retrofit + OkHttp, kotlinx.serialization - only if needed
 - Navigation 3 (NavDisplay + @Serializable NavKey), Coroutines/Flow
 
 ## Modules

@@ -178,3 +178,18 @@ The README separates what every app gets (Compose, Material 3, Nav 3, one StateF
 dispatchers) from what an app adds when it needs it (Room, DataStore, Retrofit, Hilt, WorkManager).
 **Why**: a four-screen timer read the stack as a checklist and nearly installed Room, Retrofit and Hilt.
 **Cost**: none.
+
+## ADR-025 · starter/gradle/libs.versions.toml is the single source of versions · ACCEPTED 2026-11-15
+Every document that states a version mirrors the starter catalog: README, PROMPTS.md, both templates,
+the playbook's Part 2/6.1/Appendix A and therefore CODE_SNIPPETS.md. `scripts/verify_repo.py` reads the
+catalog and fails on any mirror that disagrees or on a known-stale string.
+**Why**: the repo contradicted itself in ten places within one day of a version bump (INCIDENT-017).
+**Cost**: a version bump is now one file plus a rebuild; the guard names every file that still lies.
+**Guard**: `python3 scripts/verify_repo.py` (runs in lint-repo.yml on every push).
+
+## ADR-026 · The compiled column wins · ACCEPTED 2026-11-15
+Part 2 keeps the two reference-project columns for reading their code, and adds a fourth column for this
+repository's baseline. When they disagree, the fourth wins - not because it is newer, but because it is
+the only one compiled on every push.
+**Why**: a reader had no way to tell which of two tables was authoritative. **Cost**: a five-column
+table. **Guard**: starter/ + verify-starter.yml.

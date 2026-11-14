@@ -337,7 +337,7 @@ No library needed. This is a Room schema plus a timer:
 |---|---|---|
 | [nsh07/Tomato](https://github.com/nsh07/Tomato) | **Adopt as reference** — 1,539★, pushed 2026-11-13 | Material 3 Expressive UI, Room 3.0.3, Vico 3.3.1 charts, peak-hour analytics, Android 16 Live Updates |
 
-Note the forward signal: Tomato runs **Room 3.0.3** while the playbook baseline pins 2.8.3. Both work; plan the migration.
+Note the forward signal: Tomato runs **Room 3.0.3** while this repository's baseline pins 2.8.5. Both work; plan the migration.
 
 ## 24 · App and distraction blocking
 

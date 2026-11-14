@@ -20,7 +20,7 @@ Verified in CI by [`.github/workflows/verify-starter.yml`](../.github/workflows/
 
 ## Pinned versions
 
-AGP 9.3.2 · Gradle 9.7.1 · Kotlin 2.3.0 · KSP 2.3.6 · Hilt 2.59.2 · compileSdk 37 · minSdk 24 · Compose BOM 2025.09.01 · Navigation 3 1.2.0 · Room 2.8.5 · Turbine 1.2.1.
+AGP 9.5.1 · Gradle 9.9.1 · Kotlin 2.4.21 · KSP 2.3.14 · Hilt 2.60.1 · compileSdk 37 · minSdk 24 · Compose BOM 2026.09.00 · material3 1.5.0-rc01 (pinned) · Navigation 3 1.2.1 · Room 2.8.5 · Turbine 1.2.1.
 
 These are the same numbers as playbook Part 2. Change one, change the other in the same commit.
 

@@ -152,3 +152,32 @@ extension that AGP 9 registers, not on the Android extension.
 `LambdaAction` and `StartActivityAction`. `updateAll` lives in `androidx.glance.appwidget`.
 **Fix**: recorded here so the next agent checks the signature instead of the blog post. `javap` on the
 AAR settles it in one call (PLAYBOOKS P6, step 3).
+
+## INCIDENT-016 · Two snippets in the playbook would not compile · 2026-11-15 · SEV-2
+**What happened**: a self-audit of the playbook's own code found two blocks that fail as written.
+1. Part 4.4 called `rememberNavBackStack(Home)`. The only public overload in Navigation 3 is
+   `rememberNavBackStack(configuration: SavedStateConfiguration, vararg elements: NavKey)` - it needs a
+   `SavedStateConfiguration` whose `serializersModule` declares `polymorphic(NavKey::class) { ... }`.
+   The one-argument form does not exist.
+2. Part 7.1 used `System.getenv("KEYSTORE_PATH")?.let(::file)` inside `signingConfigs { create(...) }`.
+   `::file` is a callable reference to a Project method resolved through an outer implicit receiver;
+   inside the signing-config lambda that is fragile at best and does not compile in KTS.
+**Fix**: the snippet now shows `remember { mutableStateListOf<NavKey>(Home) }` - the form the starter
+compiles in CI - with a comment naming the `rememberNavBackStack` alternative and what it costs
+(a polymorphic serializers module, in exchange for process-death restoration). The signing snippet uses
+`?.let { java.io.File(it) }`.
+**Lesson**: a code block in a document is a claim. The starter exists because claims need compiling.
+Every snippet that is not exercised by `starter/` is unverified, and this is what unverified looks like.
+
+## INCIDENT-017 · The repository contradicted itself on versions · 2026-11-15 · SEV-2
+**What happened**: after the README and starter moved to AGP 9.5.1 / Gradle 9.9.1 / Kotlin 2.4.21 /
+BOM 2026.09.00 / material3 1.5.0-rc01, `AGP 9.3.2` still appeared in ten places: the playbook's Part 0
+summary, its Part 6.1 catalog snippet, both `templates/AGENTS*.md`, `PROMPTS.md`, Appendix A's embedded
+templates and `starter/README.md`. Part 2 also presented two reference-project columns as if they were
+the baseline.
+**Fix**: Part 2 gained a fourth column - "This repo (compiled)" - with a note that it wins when the
+columns disagree, *because it is the only one with a build behind it*. Every mirror was updated, and
+`scripts/verify_repo.py` now reads the canonical versions from `starter/gradle/libs.versions.toml` and
+fails if any mirror states a different one or contains a known-stale string.
+**Lesson**: one number, one source. A document that repeats a version in nine files has nine chances
+to be wrong, and no way to notice.

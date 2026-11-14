@@ -87,3 +87,11 @@ material3 1.5.0-rc01 / Nav3 1.2.1 / Room 2.8.5 - CI green. Two of the report's o
 (AGP 9.3.2 does exist; Kotlin latest is 2.4.21, not 2.3.21). Added INCIDENT-012..015, PLAYBOOKS P6,
 check_versions.py + verify-versions.yml, README/starter agreement check in verify_repo.py, and the
 defaults-vs-available split. ADR-023/024.
+
+## S-20261115-0013 · DONE · deep self-audit
+Audited the repo against itself rather than against a brief. Found: (a) ten stale `AGP 9.3.2` mentions
+after the version bump, including the playbook's own catalog snippet and Appendix A; (b) Part 2
+presented reference projects as the baseline; (c) two snippets that cannot compile - `rememberNavBackStack(Home)`
+(needs a SavedStateConfiguration) and `::file` inside signingConfigs; (d) the starter's unused import;
+(e) Room baseline drifted to 2.8.5. Fixed all, added a one-version-everywhere guard driven by the starter
+catalog, re-verified 14 registry "Adopt" entries (all alive). INCIDENT-016/017, ADR-025/026.

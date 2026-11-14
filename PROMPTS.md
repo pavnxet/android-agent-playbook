@@ -25,10 +25,10 @@ pavnxet/android-agent-playbook templates/AGENTS.md) and follow it exactly. Code 
 docs/CODE_SNIPPETS.md; capability libraries come from docs/FEATURE_RECIPES.md.
 
 Stack, pinned - do not invent versions:
-- AGP 9.3.2, Gradle 9.7.1, Kotlin 2.3, KSP >= 2.3.6, Hilt >= 2.59.2
-- compileSdk 37 (fall back to 36 only if a library lacks API 37 metadata), minSdk 24
-- Compose BOM 2025.09.01, Material 3, Navigation 3 (NavDisplay + NavKey)
-- Room 2.8.3 + KSP, DataStore, Retrofit + OkHttp, kotlinx.serialization
+- AGP 9.5.1, Gradle 9.9.1, Kotlin 2.4.21, KSP 2.3.14, Hilt 2.60.1
+- compileSdk 37, minSdk 24; do NOT apply org.jetbrains.kotlin.android (built into AGP 9)
+- Compose BOM 2026.09.00 + material3 1.5.0-rc01 pinned (the BOM does not move material3)
+- Navigation 3 1.2.1; Room 2.8.5, DataStore, Retrofit + OkHttp, kotlinx.serialization only if needed
 
 Structure (single module, package by layer):
 - ui/theme/{Color,Type,Theme}.kt
