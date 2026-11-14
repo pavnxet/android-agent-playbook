@@ -1,6 +1,6 @@
 # Feature recipes: capability → verified library
 
-The lookup table an agent should read **before** writing a feature. One repository per capability, with the status checked on 14 November 2026 and the Android APIs each one actually uses.
+The lookup table an agent should read **before** writing a feature. Twenty genres, one repository per genre, with the status checked on 14 November 2026 and the Android APIs each one actually uses.
 
 **How to use this file.** Name the capability, then read only that repository's entry. If the entry says *reference only* or *archived*, read it for the pattern and write the code yourself against the current API — do not add it as a dependency.
 
@@ -121,3 +121,125 @@ gh api repos/OWNER/REPO --jq '"\(.stargazers_count)★ \(.pushed_at[0:10]) archi
 ```
 
 Re-run it quarterly, or before you add a dependency. Two of the twenty-two in this list were already archived when it was written.
+
+---
+
+# Extended genres
+
+Ten more app categories. Same rule: one repository per genre, status checked before it is recommended.
+
+## 11 · Audio and video streaming
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [android/media-samples](https://github.com/android/media-samples) | **Platform** — 1,379★, pushed 2026-11-03 | Official Media3 samples: Compose video player, Picture-in-Picture, background `MediaSessionService` |
+| [android/uamp](https://github.com/android/uamp) | **Archived** (last push 2026-01-09) | Nothing new — 13,160 stars of history, and Media3 replaced its entire architecture. Read `media-samples` instead |
+
+Permissions: `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_MEDIA_PLAYBACK` + `POST_NOTIFICATIONS`. The media type is mandatory on Android 14+.
+
+## 12 · Charts, analytics, expense dashboards
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [patrykandpatrick/vico](https://github.com/patrykandpatrick/vico) | **Adopt** — 3,206★, pushed 2026-11-13 | Line, column and combo charts with markers, zoom and scroll; the most maintained Compose charting library |
+| [ehsannarmani/ComposeCharts](https://github.com/ehsannarmani/ComposeCharts) | **Adopt (alternative)** — 922★, pushed 2026-07-30 | Animated pie, donut, line and bar charts with minimal setup |
+
+One of the two, not both. `vico` if you need cartesian zoom and custom markers; `ComposeCharts` if you need a pie or donut quickly.
+
+## 13 · Maps, GPS, offline navigation
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [maplibre/maplibre-native](https://github.com/maplibre/maplibre-native) | **Adopt** — 2,316★, pushed 2026-11-14 | GPU vector tiles, custom styles, offline regions, no API key or per-call billing |
+| [mapsforge/mapsforge](https://github.com/mapsforge/mapsforge) | **Adopt (alternative)** — 1,424★, pushed 2026-10-28 | Offline `.map` archives and rendering — the live successor to the osmdroid approach |
+| [osmdroid/osmdroid](https://github.com/osmdroid/osmdroid) | **Archived** (2024-11-20) | Read for `.mbtiles`/`.zip` archive handling, then use Mapsforge or MapLibre |
+| [android/location-samples](https://github.com/android/location-samples) | **Archived** (2023-08-23) | Nothing — predates the current permission model. Use `android/platform-samples/samples/location` |
+
+Permissions: `ACCESS_FINE_LOCATION` (+ `ACCESS_COARSE_LOCATION`), `INTERNET`. `ACCESS_BACKGROUND_LOCATION` only for genuine background tracking, and Play requires a written justification for it.
+
+## 14 · Home-screen widgets and Quick Settings tiles
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [android/platform-samples](https://github.com/android/platform-samples) | **Platform** — 1,762★, pushed 2026-11-14 | Jetpack Glance app widgets, Quick Settings tiles, share-sheet targets, plus `samples/location` |
+
+Widgets are a separate composition surface: `GlanceAppWidget` + `GlanceAppWidgetReceiver`, no Compose UI tree sharing. Update them through WorkManager or a repository Flow, never from the UI process directly.
+
+## 15 · Bluetooth LE and USB serial hardware
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [NordicSemiconductor/Android-BLE-Library](https://github.com/NordicSemiconductor/Android-BLE-Library) | **Adopt** — 2,429★, pushed 2026-10-13 | GATT over coroutines and Flow; removes the classic threading bugs |
+| [mik3y/usb-serial-for-android](https://github.com/mik3y/usb-serial-for-android) | **Adopt** — 5,723★, pushed 2026-11-10 | USB-OTG serial for Arduino, ESP32, CP210x, CH340 |
+
+Permissions: `BLUETOOTH_SCAN` + `BLUETOOTH_CONNECT` (runtime, API 31+). USB needs no manifest permission — it needs a `device_filter` intent and a per-device system dialog.
+
+## 16 · Swipe card decks and swipe-to-action rows
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [saket/swipe](https://github.com/saket/swipe) | **Adopt** — 857★, pushed 2026-03-09 | Swipe-to-reveal list actions with spring physics and haptic thresholds |
+| [alexstyl/compose-tinder-card](https://github.com/alexstyl/compose-tinder-card) | **Archived** (2024-06-26) | Read the deck gesture maths, then implement with Compose Foundation `AnchoredDraggable` |
+| `alexstyl/swipeablecard` (as commonly cited) | **Does not exist** (404) | — |
+
+A card deck is `AnchoredDraggableState` with four anchors plus a fling threshold. That is a platform primitive now; a library buys you very little.
+
+## 17 · Authentication, passkeys, cloud sync
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [android/identity-samples](https://github.com/android/identity-samples) | **Platform** — 522★, pushed 2026-11-03 | Credential Manager: FIDO2 passkeys, Sign in with Google, password autofill |
+| [supabase-community/supabase-kt](https://github.com/supabase-community/supabase-kt) | **Adopt** — 853★, pushed 2026-11-13 | Auth, PostgREST, Realtime, Storage over Ktor |
+| [firebase/quickstart-android](https://github.com/firebase/quickstart-android) | **Platform** — 9,344★, pushed 2026-11-14 | Auth, Firestore, FCM, Remote Config |
+
+Pick one backend. Two sync clients in one module is the most expensive kind of duplication to unwind later.
+
+## 18 · Vector animation and skeleton loaders
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [airbnb/lottie-android](https://github.com/airbnb/lottie-android) | **Adopt** — 35,771★, pushed 2026-02-15 | `lottie-compose` for After Effects JSON animations |
+| [valentinilk/compose-shimmer](https://github.com/valentinilk/compose-shimmer) | **Adopt** — 1,087★, pushed 2026-07-09 | Synchronised shimmer placeholders for loading states |
+
+Skeletons belong to the `Loading` branch of your `UiState` — not to a separate "is shimmering" flag. One state machine, one truth.
+
+## 19 · In-app purchases and subscriptions
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [googlesamples/play-billing-samples](https://github.com/googlesamples/play-billing-samples) | **Platform** — 34★, pushed 2026-10-05 | One-time purchases, subscriptions, acknowledgement, restore |
+| `android/play-billing-samples` (as commonly cited) | **Does not exist** (404) | The samples moved to the `googlesamples` organisation |
+
+Permissions: `com.android.vending.BILLING`. No runtime prompt, but test purchases need a licence-tester account. Always acknowledge a purchase within three days or it is refunded automatically.
+
+## 20 · Offline OCR and on-device ML
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [googlesamples/mlkit](https://github.com/googlesamples/mlkit) | **Platform** — 4,310★, pushed 2026-10-26 | TextRecognition (Latin and Devanagari), on-device translation, face detection, pose |
+| [android/health-samples](https://github.com/android/health-samples) | **Platform** — 351★, pushed 2026-09-16 | Health Connect, health-platform-v1 and health-services samples |
+| `android/health-connect-samples` (as commonly cited) | **Does not exist** (404) | `android/health-samples` |
+
+OCR runs offline once the model is present; the first use downloads it unless you bundle it. Health Connect needs per-data-type consent through its own UI, and every type you request is a Play declaration.
+
+---
+
+## Dead links and replacements
+
+Six of the twenty repositories in the extended batch cannot be used as cited. Verify before you recommend:
+
+```bash
+gh api repos/OWNER/REPO --jq '"\(.stargazers_count)★ \(.pushed_at[0:10]) archived=\(.archived)"'
+```
+
+| Cited | Reality | Replacement |
+|---|---|---|
+| `alexstyl/swipeablecard` | 404 — never existed at that path | `saket/swipe`; `AnchoredDraggable` for decks |
+| `alexstyl/compose-tinder-card` | Archived 2024-06 | same as above |
+| `android/play-billing-samples` | 404 — moved | `googlesamples/play-billing-samples` |
+| `android/health-connect-samples` | 404 | `android/health-samples` |
+| `android/uamp` | Archived 2026-01 | `android/media-samples` |
+| `osmdroid/osmdroid` | Archived 2024-11 | `mapsforge/mapsforge` or `maplibre/maplibre-native` |
+| `android/location-samples` | Archived 2023-08 | `android/platform-samples/samples/location` |
+
+**Why this table exists**: a 13,000-star repository can be dead. Stars measure history, not health — `archived` and `pushed_at` measure health.

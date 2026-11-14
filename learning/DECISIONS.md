@@ -84,3 +84,11 @@ Every registry entry is labelled Adopt / Reference only / Archived / Platform, w
 push. Two of the 22 cited repositories were already archived when the list reached us.
 **Why**: a bare list of repositories ages into misinformation; a status column makes staleness visible
 at the point of use. **Cost**: re-verification is manual, quarterly.
+
+## ADR-013 · Registry is 20 genres, and every entry carries a status · ACCEPTED 2026-11-14
+`docs/FEATURE_RECIPES.md` now covers 20 genres (10 capability, 10 app genre) and every entry is
+labelled Adopt / Adopt (alternative) / Reference only / Archived / Platform / Does not exist.
+**Why**: six of the 20 extended repositories were unusable as cited (3 x 404, 3 x archived, plus an
+archived author library), and a bare list cannot express that. **Cost**: two files to update per
+change (registry + Part 16/17). **Guard**: the "Dead links and replacements" table plus the
+one-line `gh api` re-verification command in the registry.

@@ -48,6 +48,7 @@ TITLES = [
     "Official template package tree",
     "Official template ViewModel",
     "Feature recipe prompt",
+    "Extended genre prompt",
     "AGENTS.md single-module template",
     "AGENTS.md multi-module template",
 ]

@@ -32,3 +32,10 @@ Verified 22 repositories across 10 capabilities: all exist, two are archived, si
 be reference-only, one claim failed inspection. Added `docs/FEATURE_RECIPES.md`, playbook Part 16
 (35 pages now), README and template pointers, ADR-011/012, INCIDENT-005. Snippets regenerated (21
 blocks). next: re-verify the registry quarterly.
+
+## S-20261114-0006 · DONE · 20-genre registry
+Verified 20 more repositories across 10 app genres: 3 paths do not exist, 3 repos are archived, and
+the author's swipe-deck library is archived as well. Extended `docs/FEATURE_RECIPES.md` to 20 genres
+with status labels and a dead-links table; added playbook Part 17 (38 pages, 22 snippet blocks);
+recorded ADR-013 and INCIDENT-006.
+next: re-verify the whole registry quarterly; the archived list will grow.

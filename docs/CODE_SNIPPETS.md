@@ -29,8 +29,9 @@ Looking for a **library** rather than a snippet? See [FEATURE_RECIPES.md](FEATUR
 17. [Official template package tree](#official-template-package-tree)
 18. [Official template ViewModel](#official-template-viewmodel)
 19. [Feature recipe prompt](#feature-recipe-prompt)
-20. [AGENTS.md single-module template](#agentsmd-single-module-template)
-21. [AGENTS.md multi-module template](#agentsmd-multi-module-template)
+20. [Extended genre prompt](#extended-genre-prompt)
+21. [AGENTS.md single-module template](#agentsmd-single-module-template)
+22. [AGENTS.md multi-module template](#agentsmd-multi-module-template)
 
 ## Install the agent skills
 
@@ -458,6 +459,17 @@ and the GitHub release check with pavi2410/kmp-app-updater.
 Follow the MVVM + StateFlow rules in AGENTS.md: one UiState per screen,
 effects in a Channel, inject the dispatcher, and add a unit test per state transition.
 Write the export to app storage first; only use SAF when the user picks a destination.
+```
+
+## Extended genre prompt
+
+```kotlin
+Build an offline study + expense tracker:
+- charts with patrykandpatrick/vico (docs/FEATURE_RECIPES.md, genre 12)
+- home-screen timer with Jetpack Glance (android/platform-samples, genre 14)
+- PDF report export with jksalcedo/compose-to-pdf (genre 1)
+Follow AGENTS.md: one UiState per screen, effects in a Channel, injected dispatchers,
+a unit test per state transition, and add each permission in the module that uses it.
 ```
 
 ## AGENTS.md single-module template

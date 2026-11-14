@@ -46,3 +46,15 @@ did not survive a code search (30 references).
 stars and last push; Part 16 documents what the audit changed.
 **Lesson**: a repository that exists is not a repository that works. Check `archived` and `pushed_at`
 before recommending, and check the build file before repeating a version claim.
+
+## INCIDENT-006 · Six of twenty extended repositories unusable as cited · 2026-11-14 · SEV-4
+**What happened**: of 20 repositories in the extended genre list, three paths returned 404
+(`alexstyl/swipeablecard`, `android/play-billing-samples`, `android/health-connect-samples`) and three
+were archived (`android/uamp` 2026-01, `osmdroid/osmdroid` 2024-11, `android/location-samples`
+2023-08). A fourth, `alexstyl/compose-tinder-card`, is archived too.
+**Fix**: registry sections 11-20 carry status labels and a "Dead links and replacements" table;
+playbook Part 17 documents the six; replacements are `saket/swipe` + `AnchoredDraggable`,
+`googlesamples/play-billing-samples`, `android/health-samples`, `android/media-samples`,
+`mapsforge/mapsforge` and `android/platform-samples/samples/location`.
+**Lesson**: a 13,000-star repository can be dead. Stars measure history; `archived` and `pushed_at`
+measure health. Check both before recommending anything.
