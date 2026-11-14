@@ -26,3 +26,9 @@ self-target. The scanner was refined once (ADR-008) after two false positives on
 Publishing is blocked in this environment: the GitHub App cannot create repositories
 (`Resource not accessible by integration`). The repo must be created by a human, then pushed.
 next: create the remote, push, tag v1.0.0; keep the version matrix current.
+
+## S-20261114-0005 · DONE · capability registry
+Verified 22 repositories across 10 capabilities: all exist, two are archived, six are stale enough to
+be reference-only, one claim failed inspection. Added `docs/FEATURE_RECIPES.md`, playbook Part 16
+(35 pages now), README and template pointers, ADR-011/012, INCIDENT-005. Snippets regenerated (21
+blocks). next: re-verify the registry quarterly.

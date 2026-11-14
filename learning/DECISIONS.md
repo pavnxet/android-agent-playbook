@@ -69,3 +69,18 @@ values, with the reason recorded inline.
 indistinguishable from a real leak to CI (INCIDENT-004).
 **Cost**: one extra config file. **Guard**: the allowlist matches exact synthetic strings, not paths,
 so a real key pasted into any file is still caught.
+
+## ADR-011 · Capability registry lives in a generated-safe file · ACCEPTED 2026-11-14
+`docs/FEATURE_RECIPES.md` holds the capability -> library registry. It is hand-maintained, unlike
+`docs/CODE_SNIPPETS.md`, which `scripts/gen_snippets.py` overwrites from the DOCX.
+**Why**: the registry is prose and judgement, not extractable code; putting it in the generated file
+would delete it on the next regeneration. The playbook carries the decision layer (Part 16), the
+registry carries the per-repository detail.
+**Cost**: two places to update when a library changes status - Part 16 and the registry.
+**Guard**: `scripts/verify_repo.py` checks both files' links and anchors.
+
+## ADR-012 · Status column beats a recommendation list · ACCEPTED 2026-11-14
+Every registry entry is labelled Adopt / Reference only / Archived / Platform, with stars and last
+push. Two of the 22 cited repositories were already archived when the list reached us.
+**Why**: a bare list of repositories ages into misinformation; a status column makes staleness visible
+at the point of use. **Cost**: re-verification is manual, quarterly.

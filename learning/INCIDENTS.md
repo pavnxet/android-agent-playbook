@@ -36,3 +36,13 @@ literal exists in the file; a narrow `.gitleaks.toml` allowlist covers the histo
 full-history scan does not re-report a value that was never a credential. Nothing else allowlisted.
 **Lesson**: a local bypass comment is not a CI bypass. Test fixtures must not look like secrets in the
 bytes on disk - construct them at runtime instead.
+
+## INCIDENT-005 · Archived libraries recommended as primary picks · 2026-11-14 · SEV-4
+**What happened**: a capability list named `arcanegolem/Lycoris` as a ready-to-use PDF viewer and
+`android/storage-samples` as a reference; both are archived (2025-02-20 and 2025-08-29). Six further
+entries were stale by 1-2.5 years, and one technical claim ("zero AndroidView" in the CameraX demo)
+did not survive a code search (30 references).
+**Fix**: `docs/FEATURE_RECIPES.md` labels every entry Adopt / Reference only / Archived / Platform with
+stars and last push; Part 16 documents what the audit changed.
+**Lesson**: a repository that exists is not a repository that works. Check `archived` and `pushed_at`
+before recommending, and check the build file before repeating a version claim.

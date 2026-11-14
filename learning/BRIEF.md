@@ -11,6 +11,7 @@ snippets, and this memory/safety layer. Content verified 14 November 2026 agains
 
 ## Top pitfalls (≤ 10, most expensive to rediscover first)
 - docs: never copy code from the PDF; extract from the DOCX -> `docs/CODE_SNIPPETS.md` [area: docs]
+- libs: check `archived` + `pushed_at` before recommending a repository; two in the registry already are [area: docs]
 - android: AGP 9 hard-requires KSP >= 2.3.6 and Hilt >= 2.59.2; older versions fail the build [area: android-build]
 - android: `NavHost` is Navigation 2; a 2026 stack uses `NavDisplay` + `@Serializable NavKey` [area: android-ui]
 - android: a ViewModel survives rotation, not process death - typed input needs `SavedStateHandle` [area: android-ui]
