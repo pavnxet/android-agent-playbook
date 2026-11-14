@@ -189,12 +189,17 @@ if os.path.exists(scanner_path):
         fail(f'cannot import scan_sensitive.py: {exc}')
         scanner = None
     if scanner is not None:
+        # Synthetic values, assembled at runtime so no key-shaped literal exists in the
+        # source file (gitleaks scans file bytes and would flag one). See ADR-010.
+        FAKE_PASSWORD = 'hunter2' + 'hunter2'
+        FAKE_API_KEY = 'sk-' + 'live-' + 'abcdef' + '123456'
+
         # env indirection must pass; literals must be caught
         cases = [
             ('storePassword = System.getenv("KEYSTORE_PASSWORD")', False),
             ('KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}', False),
-            ('password = "hunter2hunter2"', True),  # scan:allow - test fixture, not a credential
-            ('api_key = "sk-live-abcdef123456"', True),  # scan:allow - test fixture, not a credential
+            ('password = "' + FAKE_PASSWORD + '"', True),
+            ('api_key = "' + FAKE_API_KEY + '"', True),
         ]
         for line, should_flag in cases:
             flagged = bool(scanner.scan_content('probe.kt', line, []))

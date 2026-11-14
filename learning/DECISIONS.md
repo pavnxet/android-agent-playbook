@@ -60,3 +60,12 @@ It now routes every added diff line through `scan_content()`, the same function 
 **Why**: a gate that disagrees with itself trains people to bypass it - the first push was blocked by
 two lines the commit gate had already approved.
 **Cost**: none; push-time coverage is now a superset of commit-time coverage.
+
+## ADR-010 · Test fixtures are assembled, never literal · ACCEPTED 2026-11-14
+`verify_repo.py` builds its fake credential strings at runtime (`'sk-' + 'live-' + ...`) instead of
+embedding them. `.gitleaks.toml` extends the default ruleset and allowlists only those two synthetic
+values, with the reason recorded inline.
+**Why**: Gitleaks scans file bytes and does not honour `scan:allow`, so a literal fixture is
+indistinguishable from a real leak to CI (INCIDENT-004).
+**Cost**: one extra config file. **Guard**: the allowlist matches exact synthetic strings, not paths,
+so a real key pasted into any file is still caught.

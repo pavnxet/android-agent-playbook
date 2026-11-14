@@ -1,0 +1,21 @@
+# Gitleaks configuration for android-agent-playbook.
+#
+# The default ruleset is kept in full. The only addition is a narrow allowlist for a
+# synthetic token that appeared in scripts/verify_repo.py in commit 8a82c53, where it was
+# a test fixture proving the local scanner catches literals (see learning/INCIDENTS.md,
+# INCIDENT-004). The literal was removed in the following commit; this entry exists only so
+# a full-history scan of that commit does not re-report a value that was never a credential.
+#
+# Nothing else is allowlisted: paths and files are still scanned in full.
+
+title = "android-agent-playbook"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Synthetic test fixture from scripts/verify_repo.py (commit 8a82c53)"
+regexes = [
+  '''sk-live-abcdef[0-9]{6}''',
+  '''(hunter2){2}''',
+]
