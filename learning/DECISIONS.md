@@ -131,3 +131,28 @@ Gradle) or internal signing (env-var `signingConfig`, signs during the build, Pa
 **Why**: external signing keeps secrets out of the build file but means the artifact you tested is not
 the artifact you ship; internal signing keeps them identical but puts the keystore path in the build.
 **Cost**: a project must state which one it uses. **Guard**: Part 20.3 step 3.
+
+## ADR-019 · The starter is a build proof, not a template · ACCEPTED 2026-11-14
+`starter/` is a one-screen app on the exact pinned baseline, compiled and tested by
+`.github/workflows/verify-starter.yml` on every change to that folder. It is not what
+`scripts/init-agent-rules.sh` installs - that remains `templates/AGENTS.md`.
+**Why**: a version matrix nobody compiles drifts; a compiled one cannot. The two roles are different
+(a proof must stay minimal, a template must stay adaptable), so they are separate artefacts.
+**Cost**: two places to bump when the baseline moves (Part 2 and `starter/gradle/libs.versions.toml`).
+**Guard**: the starter README states the pairing rule; CI fails if the pinned stack stops building.
+
+## ADR-020 · Prompts live in PROMPTS.md, next to the rules · ACCEPTED 2026-11-14
+Five copy-paste prompts with `[bracketed]` variables cover scaffold, vertical slice, modularisation,
+release gate and crash loop. `init-agent-rules.sh` installs PROMPTS.md alongside AGENTS.md.
+**Why**: rules tell an agent *how* to write code; a prompt tells it *what* to do now, with the
+evidence command attached. Every prompt ends with "paste the real output".
+**Cost**: prompts age with the playbook - re-read them when a Part changes.
+
+## ADR-021 · Local-path detection requires an absolute path · ACCEPTED 2026-11-14
+`LOCAL_USER_PATH_UNIX` now asserts that a unix home-directory path (the home and Users roots) is not
+preceded by a word character or another slash. Relative source paths such as `ui/home/HomeUiState.kt` therefore pass,
+while an absolute home-directory path (for example a keystore under a user's home folder) is still
+caught.
+**Why**: the starter README table names `ui/home/HomeUiState.kt`, which the old pattern read as a home
+directory and blocked the commit (same class of false positive as ADR-008).
+**Cost**: none. **Guard**: three regression cases in `scripts/verify_repo.py` (one negative, two positive).

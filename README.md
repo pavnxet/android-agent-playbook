@@ -8,6 +8,8 @@
 [![Material 3](https://img.shields.io/badge/Material%203-M3-757575)](https://m3.material.io)
 [![Agent memory](https://img.shields.io/badge/agent%20memory-tiered-6E56CF)](learning/BRIEF.md)
 [![Secret scan](https://img.shields.io/badge/secret%20scan-fail--closed-B3261E)](scripts/scan_sensitive.py)
+[![Lint Repository](https://github.com/pavnxet/android-agent-playbook/actions/workflows/lint-repo.yml/badge.svg)](https://github.com/pavnxet/android-agent-playbook/actions/workflows/lint-repo.yml)
+[![Verify Starter](https://github.com/pavnxet/android-agent-playbook/actions/workflows/verify-starter.yml/badge.svg)](https://github.com/pavnxet/android-agent-playbook/actions/workflows/verify-starter.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -32,8 +34,11 @@ Layer 1 alone makes an agent write correct Android. Layer 2 makes it remember, a
 | [`templates/AGENTS.md`](templates/AGENTS.md) | **Default.** A 1–4 screen Android app. Single module, package-by-layer, ready to drop in a repo root. |
 | [`templates/AGENTS_multimodule.md`](templates/AGENTS_multimodule.md) | You have crossed 4–5 features and need the `:core:*` / `:feature:*:api|impl` graph. |
 | [`docs/CODE_SNIPPETS.md`](docs/CODE_SNIPPETS.md) | Your agent needs exact code: version catalog, `gradle.properties`, ViewModel + `UiState`, Hilt, Nav 3, Room repository, signing, R8, tests, CI YAML. |
+| [`PROMPTS.md`](PROMPTS.md) | You want to hand a task to an agent right now: five copy-paste prompts (scaffold, vertical slice, modularise, release gate, crash loop) with `[bracketed]` variables. |
+| [`starter/`](starter/) | You want proof the baseline compiles: a one-screen app on the exact pinned stack, built and tested by CI on every change. |
 | [`docs/FEATURE_RECIPES.md`](docs/FEATURE_RECIPES.md) | Your agent is about to add a capability or genre (PDF export, camera, upload, QR, AI, media, charts, maps, widgets, BLE/USB, swipe, passkeys, animation, billing, OCR). **20 genres + 25 study-app genres + 32 tooling/polish repos**, one verified repository each, with status and permission cost. |
 | [`docs/Android_Engineering_Playbook.pdf`](docs/Android_Engineering_Playbook.pdf) | The full manual: 20 parts, 3 appendices, 46 pages. |
+| [`scripts/check_markdown_fences.py`](scripts/check_markdown_fences.py) | Repo hygiene: proves no code fence is unbalanced and no LaTeX/OCR artifact leaked into code. |
 | [`docs/Android_Engineering_Playbook.docx`](docs/Android_Engineering_Playbook.docx) | You want to edit or extend the manual. |
 | [`AGENTS.md`](AGENTS.md) | The protocol an agent follows **in this repository**: memory tiers, safety invariants, git rules, Project Profile (§12). |
 | [`learning/`](learning/BRIEF.md) | Cold-start memory: `BRIEF.md` (read first), `DECISIONS.md` (ADRs), `PLAYBOOKS.md` (recipes), `INCIDENTS.md` (postmortems), `learning.md`, `TOOLS.md`, `summary.md`. |
@@ -123,10 +128,14 @@ The rule that makes it work: **recall before exploring**. Before reading code to
 ## Verify it yourself
 
 ```bash
-python3 scripts/verify_repo.py                # links, anchors, fences, YAML parse, shell, installer
-python3 scripts/scan_sensitive.py --doctor    # hooks + denylist present
-bash -n scripts/*.sh                          # POSIX syntax
+python3 scripts/verify_repo.py               # links, anchors, fences, YAML parse, shell, installer
+python3 scripts/check_markdown_fences.py     # fence balance + no LaTeX/OCR artifacts in code
+python3 scripts/scan_sensitive.py --doctor   # hooks + denylist present
+bash -n scripts/*.sh                         # POSIX syntax
+cd starter && ./gradlew testDebugUnitTest    # the baseline stack actually compiles
 ```
+
+Three CI workflows enforce this: `lint-repo.yml` (shell, executable bits, fences, links, self-check), `verify-starter.yml` (the starter app builds and tests), and `secret-scan.yml` (sensitive-content scan plus Gitleaks).
 
 ## Companion ecosystem
 

@@ -62,3 +62,11 @@ action-gh-release v3, setup-android v4, emulator-runner v2.38). Found the same s
 Part 10 workflow and in secret-scan.yml, and fixed both. Part 20 added; registry section 40; 46 pages.
 ADR-017/018, INCIDENT-009 logged.
 next: weekly Renovate group for github-actions is the standing fix.
+
+## S-20261114-0010 · DONE · v2.0 production upgrade
+Added PROMPTS.md (5 prompts), lint-repo.yml (shell syntax + 100755 check + fence guard + verify_repo
++ lychee offline links), scripts/check_markdown_fences.py, a compiled `starter/` app on the exact
+pinned baseline with verify-starter.yml, a capability index and permission-hygiene table in the
+registry, README badges and map rows, template pointers, and installer support for FEATURE_RECIPES.md
+and PROMPTS.md. ADR-019/020 logged.
+next: keep starter and Part 2 in lockstep; the starter build is the proof that the matrix is real.

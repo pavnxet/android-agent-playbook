@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      Permission hygiene (playbook Part 16.3 / FEATURE_RECIPES "Permission & manifest hygiene"):
+      this starter requests none. Add CAMERA, POST_NOTIFICATIONS, REQUEST_INSTALL_PACKAGES or
+      BIND_ACCESSIBILITY_SERVICE only in the module whose recipe explicitly needs them.
+    -->
+
+    <application
+        android:name=".StarterApp"
+        android:allowBackup="false"
+        android:label="Starter"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Starter">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

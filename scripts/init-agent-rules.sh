@@ -62,8 +62,10 @@ else
   FLAVOUR="single-module (1-4 screens)"
 fi
 SRC_SNIPPETS="$REPO_DIR/docs/CODE_SNIPPETS.md"
+SRC_RECIPES="$REPO_DIR/docs/FEATURE_RECIPES.md"
+SRC_PROMPTS="$REPO_DIR/PROMPTS.md"
 
-for f in "$SRC_AGENTS" "$SRC_SNIPPETS"; do
+for f in "$SRC_AGENTS" "$SRC_SNIPPETS" "$SRC_RECIPES" "$SRC_PROMPTS"; do
   if [ ! -f "$f" ]; then
     echo "error: missing source file '$f' - is this script inside the repository?" >&2
     exit 1
@@ -86,11 +88,15 @@ fi
 mkdir -p "$TARGET/docs"
 cp "$SRC_AGENTS" "$DEST_AGENTS"
 cp "$SRC_SNIPPETS" "$TARGET/docs/CODE_SNIPPETS.md"
+cp "$SRC_RECIPES" "$TARGET/docs/FEATURE_RECIPES.md"
+cp "$SRC_PROMPTS" "$TARGET/PROMPTS.md"
 
 echo "Android agent rules installed into: $TARGET"
 echo "  template : $FLAVOUR"
 echo "  AGENTS.md                     <- templates/$(basename "$SRC_AGENTS")"
 echo "  docs/CODE_SNIPPETS.md         <- docs/CODE_SNIPPETS.md"
+echo "  docs/FEATURE_RECIPES.md       <- docs/FEATURE_RECIPES.md"
+echo "  PROMPTS.md                    <- PROMPTS.md"
 echo ""
 echo "Next, from $TARGET:"
 echo "  ./gradlew assembleDebug --stacktrace"

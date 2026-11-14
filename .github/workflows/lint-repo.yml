@@ -1,0 +1,63 @@
+name: Lint Repository
+
+# Fast self-checks: shell syntax, executable bits, Markdown fence corruption,
+# link integrity and the repository's own verify_repo.py gate.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Shell, fences, links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Shell script syntax
+        run: bash -n scripts/init-agent-rules.sh scripts/setup.sh
+
+      - name: Scripts are executable in git
+        run: |
+          set -e
+          for f in scripts/init-agent-rules.sh scripts/setup.sh; do
+            mode=$(git ls-files -s "$f" | awk '{print $1}')
+            if [ "$mode" != "100755" ]; then
+              echo "::error file=$f::$f must be mode 100755 in git, found $mode (run: git update-index --chmod=+x $f)"
+              exit 1
+            fi
+            echo "$f -> $mode"
+          done
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      - name: Markdown code-fence corruption guard
+        run: python3 scripts/check_markdown_fences.py
+
+      - name: Install check dependencies
+        run: pip install pyyaml
+
+      - name: Repository self-check
+        run: python3 scripts/verify_repo.py
+
+      - name: Link integrity (internal, offline)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --offline
+            --no-progress
+            --include-fragments
+            --exclude-path starter/build
+            './**/*.md'
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

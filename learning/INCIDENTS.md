@@ -88,3 +88,14 @@ own CI run printed `Node.js 20 is deprecated, forced to run on Node.js 24` and w
 registry section 40 document the table; ADR-017 makes tag verification a rule.
 **Lesson**: deprecation annotations are a dependency alert, not decoration. If a runner warns that a
 runtime is being force-upgraded, the action is stale - check the tag that same day.
+
+## INCIDENT-010 · The registry listed dead repos as live (carried into v2.0) · 2026-11-14 · SEV-4
+**What happened**: a v2.0 brief asked for `docs/FEATURE_RECIPES.md` to list 45+ repositories,
+including `alexstyl/swipeablecard` (404), `android/play-billing-samples` (404),
+`android/health-connect-samples` (404), `android/uamp` (archived), `osmdroid/osmdroid` (archived),
+`android/location-samples` (archived) and `arcanegolem/Lycoris` (archived).
+**Fix**: the existing registry was kept - it already labels every entry Adopt / Reference only /
+Archived / Platform / Does not exist - and a capability index plus a permission-hygiene table were
+added on top. Nothing was regressed to satisfy the brief's wording.
+**Lesson**: "create file X with content Y" can be a request to regress. When the file already exists
+and is more accurate than the spec, improve it in place and say what you declined to change.

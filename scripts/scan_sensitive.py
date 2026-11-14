@@ -37,7 +37,10 @@ PATTERNS = {
         r"\b[A-Za-z]:\\(?:Users|Documents|Projects|Home)\\[A-Za-z0-9_.-]+", re.IGNORECASE
     ),
     "LOCAL_USER_PATH_UNIX": re.compile(
-        r"\b/(?:home|Users)/[A-Za-z0-9_.-]+", re.IGNORECASE
+        # Must be an absolute path: not preceded by a word character or another slash,
+        # so relative source paths like ui/home/HomeUiState.kt are not flagged (ADR-021).
+        r"(?<![A-Za-z0-9_.\-/])/(?:home|Users)/[A-Za-z0-9_.-]+",
+        re.IGNORECASE,
     ),
 }
 

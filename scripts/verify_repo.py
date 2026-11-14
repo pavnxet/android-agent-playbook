@@ -200,6 +200,9 @@ if os.path.exists(scanner_path):
             ('KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}', False),
             ('password = "' + FAKE_PASSWORD + '"', True),
             ('api_key = "' + FAKE_API_KEY + '"', True),
+            ('| `ui/home/HomeUiState.kt` |', False),
+            ('/home/alice/projects/app/build.gradle.kts', True),  # scan:allow - test fixture
+            ('/Users/bob/Documents/notes.md', True),  # scan:allow - test fixture
         ]
         for line, should_flag in cases:
             flagged = bool(scanner.scan_content('probe.kt', line, []))

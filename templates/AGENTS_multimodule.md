@@ -3,6 +3,7 @@
 > Canonical code, Gradle version catalogs and GitHub Actions workflows live in
 > `docs/CODE_SNIPPETS.md`. Copy snippets from there, never from the PDF.
 > Capability → library lookup (PDF, camera, upload, QR, AI) lives in `docs/FEATURE_RECIPES.md`.
+> Feature-genre library recipes live in docs/FEATURE_RECIPES.md; copy-paste task prompts live in PROMPTS.md.
 
 Native Android app in Kotlin. Multi-module, Single Activity, Compose, Material 3.
 

@@ -6,6 +6,67 @@ The lookup table an agent should read **before** writing a feature. Twenty genre
 
 **The governing rule** (same as the playbook): prefer the platform API, then AndroidX, then a third-party library. A library is justified only where no official API exists, and only while it is alive.
 
+## Quick index by capability
+
+Jump straight to the section for the capability you are about to build. Sections 1-20 are core capabilities and genres, 21-33 study apps, 34-39 tooling and polish, 40 CI/CD.
+
+| Capability you need | Section |
+|---|---|
+| Compose → vector PDF | [1](#1--compose--pdf) |
+| GitHub-releases auto-updater | [2](#2--in-app-updates-from-github-releases) |
+| Camera capture | [3](#3--camera-capture) |
+| Gallery pick, crop, compress | [4](#4--gallery-picking-cropping-compression) |
+| Multipart upload with progress | [5](#5--multipart-upload-with-progress) |
+| Notifications, WorkManager, foreground services | [6](#6--notifications-workmanager-foreground-services) |
+| QR / barcode | [7](#7--qr--barcode) |
+| Rich text and Markdown | [8](#8--rich-text-and-markdown) |
+| Storage, permissions, biometrics | [9](#9--storage-permissions-biometrics) |
+| On-device AI | [10](#10--on-device-generative-ai) |
+| Media streaming, PiP | [11](#11--audio-and-video-streaming) |
+| Charts and dashboards | [12](#12--charts-analytics-expense-dashboards) |
+| Maps, GPS, offline navigation | [13](#13--maps-gps-offline-navigation) |
+| Home-screen widgets | [14](#14--home-screen-widgets-and-quick-settings-tiles) |
+| BLE and USB hardware | [15](#15--bluetooth-le-and-usb-serial-hardware) |
+| Swipe decks and swipe rows | [16](#16--swipe-card-decks-and-swipe-to-action-rows) |
+| Auth, passkeys, cloud sync | [17](#17--authentication-passkeys-cloud-sync) |
+| Animation and skeletons | [18](#18--vector-animation-and-skeleton-loaders) |
+| In-app purchases | [19](#19--in-app-purchases-and-subscriptions) |
+| Offline OCR and ML | [20](#20--offline-ocr-and-on-device-ml) |
+| Flashcards, FSRS, Anki import | [21](#21--flashcards-and-spaced-repetition) |
+| MCQ simulators, PYQ banks, error logs | [22](#22--mcq-simulators-pyq-banks-error-logbooks) |
+| Pomodoro, focus analytics | [23](#23--pomodoro-focus-analytics-habits) |
+| Distraction blockers | [24](#24--app-and-distraction-blocking) |
+| Stylus notes, infinite canvas | [25](#25--stylus-notes-and-infinite-canvas) |
+| PDF / EPUB reader | [26](#26--pdf-and-epub-reading-annotation) |
+| YouTube lecture chapters | [27](#27--youtube-lecture-chapters) |
+| Offline Whisper transcription | [28](#28--lecture-recording-and-offline-speech-to-text) |
+| LaTeX maths | [29](#29--latex-maths-and-formula-handbooks) |
+| TTS readers | [30](#30--text-to-speech-readers) |
+| Blur, glass, sheets, confetti | [35](#35--blur-glass-sheets-confetti) |
+| Calendars, licences, Markdown UI | [36](#36--inputs-content-compliance) |
+| Zoomable images, file pickers | [37](#37--media-files-zoom-filters) |
+| Architecture frameworks, encrypted Room | [38](#38--architecture-frameworks-and-encrypted-storage) |
+| App blueprints to read | [39](#39--blueprints-to-read-not-copy) |
+| CI/CD actions | [40](#40--cicd-pipeline) |
+
+## Permission and manifest hygiene
+
+**Request a dangerous permission only when the recipe you selected explicitly requires it, and declare it in the module that uses it.** A `CAMERA` permission in an app whose camera feature is optional is a Play review finding; a `BIND_ACCESSIBILITY_SERVICE` without a stated purpose is a removal.
+
+| Permission | Only when |
+|---|---|
+| `CAMERA` | camera capture (3), QR/barcode (7), OCR by capture (20) |
+| `POST_NOTIFICATIONS` | notifications, foreground services (6), media playback (11) |
+| `REQUEST_INSTALL_PACKAGES` | self-updating APKs distributed **outside** Play (2) - a Play policy violation inside it |
+| `BIND_ACCESSIBILITY_SERVICE` | distraction blocking (24) - must have a genuine, documented purpose |
+| `ACCESS_FINE_LOCATION` / `ACCESS_BACKGROUND_LOCATION` | maps and tracking (13); background needs a Play justification |
+| `BLUETOOTH_SCAN` / `BLUETOOTH_CONNECT` | BLE (15) |
+| `com.android.vending.BILLING` | in-app purchases (19) |
+| `USE_BIOMETRIC` | biometric lock (9) |
+| `FOREGROUND_SERVICE` + typed permission | any long-running foreground work (6, 11, 28) |
+
+Photo picking on API 33+ needs **no** storage permission - use the Android Photo Picker. Health Connect permissions are per-data-type and each one is a Play declaration.
+
 | Status | Meaning |
 |---|---|
 | **Adopt** | Maintained, current toolchain, safe as a dependency |
