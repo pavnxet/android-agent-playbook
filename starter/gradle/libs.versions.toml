@@ -3,7 +3,7 @@
 
 [versions]
 agp = "9.3.2"
-kotlin = "2.3.0"
+kotlin = "2.3.0"   # AGP 9 has built-in Kotlin: do NOT apply org.jetbrains.kotlin.android
 ksp = "2.3.6"                 # AGP 9 requires >= 2.3.6
 hilt = "2.59.2"               # AGP 9 requires >= 2.59.2
 compileSdk = "37"
@@ -48,7 +48,6 @@ robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
