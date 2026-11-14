@@ -115,3 +115,19 @@ The registry marks both as "replaces Parts 3-4" and forbids stacking them on thi
 ViewModel + StateFlow + NavKey pattern.
 **Why**: each ships its own presenter/ViewModel, navigation and test story; running both produces two
 sources of truth for screen state. **Cost**: adopting one is a project-level decision, not a dependency.
+
+## ADR-017 · Action pins are verified by release tag, not by memory · ACCEPTED 2026-11-14
+Every `uses:` in the playbook and in this repository's own workflows is set to the latest released
+major, checked with `gh api repos/OWNER/REPO/releases/latest`. Renovate groups `github-actions`
+updates weekly to keep them there.
+**Why**: Part 10 was two to three majors behind on four of five actions, and this repository's CI
+printed `Node.js 20 is deprecated` as proof. A stale pin fails slowly, not loudly.
+**Cost**: majors can break inputs - read the release notes on a bump. **Guard**: Part 20.2 and the
+registry section 40 record the verified tags with dates.
+
+## ADR-018 · Signing location is a documented choice, not an accident · ACCEPTED 2026-11-14
+Two supported paths: external signing (`r0adkll/sign-android-release`, signs the artifact after
+Gradle) or internal signing (env-var `signingConfig`, signs during the build, Part 7.1).
+**Why**: external signing keeps secrets out of the build file but means the artifact you tested is not
+the artifact you ship; internal signing keeps them identical but puts the keystore path in the build.
+**Cost**: a project must state which one it uses. **Guard**: Part 20.3 step 3.

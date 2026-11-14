@@ -78,3 +78,13 @@ shark-dive nor skills, but the tree contains `.claude/skills/shark-dive/SKILL.md
 **Fix**: both recorded as verified, with the note that the evidence is the tree.
 **Lesson**: the second instance in one week (see INCIDENT-007). README-first verification produces
 false negatives; always list the tree for a claim about tooling or agent integration.
+
+## INCIDENT-009 · This playbook's own CI was 2-3 action majors behind · 2026-11-14 · SEV-3
+**What happened**: an audit of 22 CI actions found the playbook's Part 10 workflow pinned
+checkout@v4, setup-java@v4, setup-gradle@v4, upload-artifact@v4 and action-gh-release@v2, while the
+released majors were v7, v6, v6, v7 and v3. The evidence had been in front of us: this repository's
+own CI run printed `Node.js 20 is deprecated, forced to run on Node.js 24` and we treated it as noise.
+**Fix**: Part 10 and `.github/workflows/secret-scan.yml` bumped to the verified majors; Part 20 and
+registry section 40 document the table; ADR-017 makes tag verification a rule.
+**Lesson**: deprecation annotations are a dependency alert, not decoration. If a runner warns that a
+runtime is being force-upgraded, the action is stale - check the tag that same day.

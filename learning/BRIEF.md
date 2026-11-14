@@ -14,6 +14,7 @@ snippets, and this memory/safety layer. Content verified 14 November 2026 agains
 - libs: check `archived` + `pushed_at` before recommending; 9 of 60 registry entries are archived or nonexistent [area: docs]
 - libs: a claim missing from a README may still be true - check the source tree (INCIDENT-007/008) [area: verification]
 - tooling: inspectors are debugImplementation only; a release inspector is a data-exfiltration surface (ADR-015) [area: security]
+- ci: verify action majors with `gh api repos/O/R/releases/latest`; stale pins fail slowly (ADR-017, INCIDENT-009) [area: ci]
 - android: AGP 9 hard-requires KSP >= 2.3.6 and Hilt >= 2.59.2; older versions fail the build [area: android-build]
 - android: `NavHost` is Navigation 2; a 2026 stack uses `NavDisplay` + `@Serializable NavKey` [area: android-ui]
 - android: a ViewModel survives rotation, not process death - typed input needs `SavedStateHandle` [area: android-ui]

@@ -441,3 +441,58 @@ Circuit and Orbit are not add-ons - each replaces the ViewModel, navigation and 
 | `ThalzeronLabs/compose-bottom-sheets`, `Bomsamdi/top_sheet`, `nsozturk/quick-filter-kotlin` | 0 stars, weeks old | Read them; do not depend on them yet |
 
 Two claims were true but **only visible in the repository tree**: WormaCeptor's 44 MCP tools and LeakCanary's `.claude/skills/shark-dive/` skill. A README is a summary, not an inventory.
+
+---
+
+# 40 · CI/CD pipeline
+
+Twenty-two actions and workflows, checked by release tag on 14 November 2026. **Action majors move faster than any other dependency in an Android project** - this section was written because the playbook's own workflow was two to three majors behind.
+
+| Stage | Action | Latest | Note |
+|---|---|---|---|
+| Checkout | `actions/checkout` | **v7.0.1** | `fetch-depth: 0` for changelogs and tag-derived version codes |
+| JDK | `actions/setup-java` | **v6.3.0** | Temurin 21 |
+| Gradle | `gradle/actions/setup-gradle` | **v6.4.1** | Wrapper validation, caching, build scans |
+| Android SDK | `android-actions/setup-android` | **v4.0.4** | cmdline-tools, build-tools, platforms;android-37 |
+| Emulator | `ReactiveCircus/android-emulator-runner` | **v2.38.0** | KVM on ubuntu-latest |
+| Emulator (hardened) | `step-security/android-emulator-runner` | v2.38.0 | 0★ fork; read the source before trusting it with secrets |
+| Test report | `mikepenz/action-junit-report` | v6.7.1 | Inline PR annotations from JUnit XML |
+| Signing | `r0adkll/sign-android-release` | v1 | Signs unsigned APK/AAB from a base64 keystore |
+| GitHub Release | `softprops/action-gh-release` | **v3.0.4** | Attach APK, AAB, mapping.txt |
+| Play upload | `r0adkll/upload-google-play` | v1.1.5 | AAB + deobfuscation mapping per track |
+| Play all-in-one | `deep-rent/publish-android-release` | v2.1.3 | 4★, unproven |
+| Play metadata | `Triple-T/gradle-play-publisher` | 4.1.2 | Listings, screenshots, notes from Git |
+| Firebase testers | `wzieba/Firebase-Distribution-Github-Action` | v1.7.1 | Last push 2025-03 |
+| Notifications | `appleboy/telegram-action` | v1.1.2 | APK + changelog to a chat |
+| Screenshots | `fastlane/fastlane` | 2.241.2 | `supply`, `screengrab` |
+| Egress audit | `step-security/harden-runner` | v2.22.4 | Stops a compromised plugin exfiltrating `KEYSTORE_BASE64` |
+| SAST | `github/codeql-action` | codeql-bundle-v2.27.4 | `language: java-kotlin` |
+| Dependency updates | `renovatebot/github-action` | v46.3.13 | Grouped PRs for the version catalog |
+| Artifacts | `actions/upload-artifact` / `download-artifact` | **v7.0.2 / v8.0.2** | Different majors on purpose |
+| Release automation | `googleapis/release-please-action` | **v5.0.0** | Conventional Commits to semver |
+| Dependency graph | `vanniktech/gradle-dependency-graph-generator-plugin` | 0.8.0 | Gradle plugin, not an action |
+| Version codes | `github.run_number` + `-P` flags | - | No action needed |
+
+## Corrections from this batch
+
+| Cited | Reality | Use instead |
+|---|---|---|
+| `google-github-actions/release-please-action` | **Archived** (last push 2024-05) | `googleapis/release-please-action` v5.0.0 - different org, so the old pin still resolves and does nothing new |
+| `actions/setup-java@v5` | Latest is **v6.3.0** | `@v6` |
+| `actions/checkout@v5` / `@v6` | Latest is **v7.0.1** | `@v7` |
+| `actions/upload-artifact@v4` | Latest is **v7.0.2** | `@v7` (download-artifact is v8) |
+| `softprops/action-gh-release@v2` | Latest is **v3.0.4** | `@v3` |
+| `android-actions/setup-android@v3` | Latest is **v4.0.4** | `@v4` |
+| `android-emulator-runner v2.35.0` | Latest is **v2.38.0** | `@v2` |
+
+**This playbook was guilty too.** Its Part 10 workflow sat on checkout@v4, setup-java@v4, setup-gradle@v4, upload-artifact@v4 and action-gh-release@v2, and the repository's own CI printed `Node.js 20 is deprecated, forced to run on Node.js 24` as evidence. It is now on v7 / v6 / v6 / v7 / v3.
+
+## One-time setup that actually bites
+
+1. `git update-index --chmod=+x gradlew` - otherwise every Linux runner fails with `Permission denied`.
+2. Base64 the upload keystore into a single line; store `KEYSTORE_BASE64`, `KEY_ALIAS`, `KEYSTORE_PASSWORD`, `KEY_PASSWORD` as secrets; back the keystore up outside CI.
+3. Choose where signing happens: external (`r0adkll/sign-android-release`) keeps `signingConfigs` out of the build but signs *after* Gradle, so the tested artifact is not the shipped one; internal (env-var `signingConfig`, playbook Part 7.1) signs during the build. Pick one and document it.
+4. Pin by major tag and let Renovate move it, or pin by commit SHA for a hardened chain - never mix conventions in one workflow.
+5. `harden-runner` first step, CodeQL on a schedule. Together they answer what left the runner and what in the code was reachable.
+
+The cheapest long-term fix for this whole section is one Renovate rule: group `github-actions` updates and open them weekly. Every stale pin above would have been a merged PR instead of a discovery.

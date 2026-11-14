@@ -54,3 +54,11 @@ zero-star newcomers. Two claims verified only in repository trees (WormaCeptor's
 LeakCanary's shark-dive skill). Registry now 39 sections; playbook 43 pages, 19 parts, 23 snippets.
 ADR-015/016, INCIDENT-008 logged.
 next: quarterly re-verification; the 2023-era and zero-star entries are the first to re-check.
+
+## S-20261114-0009 · DONE · CI/CD actions verified
+Verified 22 actions by release tag: one archived (google-github-actions/release-please-action, moved to
+googleapis v5), six cited a major behind (checkout v7, setup-java v6, upload-artifact v7,
+action-gh-release v3, setup-android v4, emulator-runner v2.38). Found the same staleness in our own
+Part 10 workflow and in secret-scan.yml, and fixed both. Part 20 added; registry section 40; 46 pages.
+ADR-017/018, INCIDENT-009 logged.
+next: weekly Renovate group for github-actions is the standing fix.
