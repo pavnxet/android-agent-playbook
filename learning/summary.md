@@ -46,3 +46,11 @@ six formats not seven; notate is e-ink-first; azri is a 1-star but real FSRS-6 i
 Coding-Meet stale since 2025-08), and one claim confirmed only by reading the source tree (focuslock).
 Registry now 33 genres; playbook 40 pages, 18 parts. ADR-014, INCIDENT-007 logged.
 next: re-verify quarterly; Room 3.x migration is the next real decision.
+
+## S-20261114-0008 · DONE · tooling, polish and blueprints
+Verified 32 repositories: one 404 (dionsegijn/Konfetti -> DanielMartinus/Konfetti), one untouched
+since 2023 (skydoves/Orchestra), one superseded by Navigation 3 (compose-destinations), three
+zero-star newcomers. Two claims verified only in repository trees (WormaCeptor's 44 MCP tools,
+LeakCanary's shark-dive skill). Registry now 39 sections; playbook 43 pages, 19 parts, 23 snippets.
+ADR-015/016, INCIDENT-008 logged.
+next: quarterly re-verification; the 2023-era and zero-star entries are the first to re-check.

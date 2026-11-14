@@ -30,8 +30,9 @@ Looking for a **library** rather than a snippet? See [FEATURE_RECIPES.md](FEATUR
 18. [Official template ViewModel](#official-template-viewmodel)
 19. [Feature recipe prompt](#feature-recipe-prompt)
 20. [Extended genre prompt](#extended-genre-prompt)
-21. [AGENTS.md single-module template](#agentsmd-single-module-template)
-22. [AGENTS.md multi-module template](#agentsmd-multi-module-template)
+21. [Debug-only inspection wiring](#debug-only-inspection-wiring)
+22. [AGENTS.md single-module template](#agentsmd-single-module-template)
+23. [AGENTS.md multi-module template](#agentsmd-multi-module-template)
 
 ## Install the agent skills
 
@@ -470,6 +471,20 @@ Build an offline study + expense tracker:
 - PDF report export with jksalcedo/compose-to-pdf (genre 1)
 Follow AGENTS.md: one UiState per screen, effects in a Channel, injected dispatchers,
 a unit test per state transition, and add each permission in the module that uses it.
+```
+
+## Debug-only inspection wiring
+
+```kotlin
+// app/build.gradle.kts
+dependencies {
+    debugImplementation("com.github.wormaceptor:wormaceptor:<version>")
+    debugImplementation("com.github.ChuckerTeam.Chucker:library:<version>")
+    releaseImplementation("com.github.ChuckerTeam.Chucker:library-no-op:<version>")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:<version>")
+    testImplementation("app.cash.paparazzi:paparazzi:<version>")
+    debugImplementation("com.airbnb.android:showkase-processor:<version>")
+}
 ```
 
 ## AGENTS.md single-module template

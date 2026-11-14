@@ -354,3 +354,90 @@ Cross-reference: **genre 1** (`jksalcedo/compose-to-pdf`).
 3. **Long work is WorkManager work.** Transcription, OCR of a chapter and PDF export run with a foreground notification, not in a ViewModel coroutine.
 4. **Conflicts are decided once.** Single-user study app: last-write-wins on a server timestamp, documented in `learning/DECISIONS.md`.
 5. **Never lose FSRS state.** The review log is durable; the scheduler is derived.
+
+---
+
+# Tooling, polish kits and blueprints
+
+Thirty-two repositories in six categories. This section is different from the genre sections: most of these are **components you add to a screen**, not capabilities that define an app.
+
+## 34 · Runtime debugging an agent can drive
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [wormaceptor/WormaCeptor](https://github.com/wormaceptor/WormaCeptor) | **Adopt (debug only)** — 46★, pushed 2026-11-13, 44 MCP tools confirmed | Live HTTP/WebSocket traffic, Room tables, DataStore, crashes and FPS readable by an agent from a debug build |
+| [ChuckerTeam/chucker](https://github.com/ChuckerTeam/chucker) | **Adopt (debug only)** — 4,588★, pushed 2026-11-14 | OkHttp inspector; `library-no-op` in release |
+| [square/leakcanary](https://github.com/square/leakcanary) | **Adopt (debug only)** — 30,009★, pushed 2026-10-21 | Leak detection plus a real `shark-dive` skill at `.claude/skills/shark-dive/SKILL.md` |
+| [cashapp/paparazzi](https://github.com/cashapp/paparazzi) | **Adopt** — 2,640★, pushed 2026-11-13 | JVM screenshot tests for Compose - no device, no emulator |
+| [airbnb/Showkase](https://github.com/airbnb/Showkase) | **Adopt** — 2,323★, pushed 2026-10-26 | Auto-collected `@Preview` catalog |
+
+**Security rule, not a build rule:** `debugImplementation` only, no-op artefacts in release, and any local port or MCP endpoint bound to localhost. A debug inspector that reaches production is a data-exfiltration surface carrying your package name.
+
+## 35 · Blur, glass, sheets, confetti
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [chrisbanes/haze](https://github.com/chrisbanes/haze) | **Adopt** — 2,686★, pushed 2026-11-14 | Haze 2: `hazeBlur`, `hazeGlass`, progressive background blur |
+| [skydoves/Cloudy](https://github.com/skydoves/Cloudy) | **Adopt (alternative)** — 1,294★, pushed 2026-09-13 | GPU `RenderEffect` blur on API 31+, CPU fallback below |
+| [DanielMartinus/Konfetti](https://github.com/DanielMartinus/Konfetti) | **Adopt** — 3,394★, pushed 2026-11-04 | Confetti celebrations |
+| [ThalzeronLabs/compose-bottom-sheets](https://github.com/ThalzeronLabs/compose-bottom-sheets) | **Reference only** — 0★, pushed 2026-11-11 | Awaitable sheets: `confirm`, `choose`, `date`, `time`, `input` |
+| [lucf15/ModalBottomSheet](https://github.com/lucf15/ModalBottomSheet) | **Reference only** — 7★, pushed 2025-10-20 | Fixes nested scrolling and IME padding |
+| [Bomsamdi/top_sheet](https://github.com/Bomsamdi/top_sheet) | **Reference only** — 0★, pushed 2026-08-31 | A sheet that slides from the top |
+
+One blur library, not two. Blurred surfaces must be static or small - blurring a scrolling list is the most expensive thing in this section.
+
+## 36 · Inputs, content, compliance
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [kizitonwose/Calendar](https://github.com/kizitonwose/Calendar) | **Adopt** — 5,627★, pushed 2026-08-13 | Month/week/year views, ranges, GitHub-style heatmaps |
+| [mikepenz/AboutLibraries](https://github.com/mikepenz/AboutLibraries) | **Adopt** — 4,498★, pushed 2026-11-14 | Generates the OSS licence screen from the version catalog - a Play requirement |
+| [mikepenz/multiplatform-markdown-renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) | **Adopt** — 1,137★, pushed 2026-11-14 | Markdown with tables, code highlighting, Coil 3 images |
+| [anhaki/PickTime-Compose](https://github.com/anhaki/PickTime-Compose) | **Adopt** — 41★, pushed 2026-03-10 | Wheel time picker |
+| [TuleSimon/xMaterialccp](https://github.com/TuleSimon/xMaterialccp) | **Adopt** — 70★, pushed 2026-01-28 | Country-code picker |
+| [skydoves/Orchestra](https://github.com/skydoves/Orchestra) | **Archived in practice** — 465★, **no push since 2023-01-02** | Use `skydoves/Balloon` for tooltips instead |
+
+## 37 · Media, files, zoom, filters
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [saket/telephoto](https://github.com/saket/telephoto) | **Adopt** — 1,573★, pushed 2026-07-22 | `ZoomableImage` with tile sub-sampling - huge diagrams without OOM |
+| [vinceglb/FileKit](https://github.com/vinceglb/FileKit) | **Adopt** — 1,566★, pushed 2026-11-09 | `openFilePicker`, `openFileSaver`, `openDirectoryPicker`, compression |
+| [Xiryl/compose-stories](https://github.com/Xiryl/compose-stories) | **Reference only** — 10★, pushed 2025-09-14 | Story player mechanics |
+| [nsozturk/quick-filter-kotlin](https://github.com/nsozturk/quick-filter-kotlin) | **Reference only** — 0★, pushed 2026-07-07 | Faceted search chips and filter panel |
+
+## 38 · Architecture frameworks and encrypted storage
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [slackhq/circuit](https://github.com/slackhq/circuit) | **Adopt (replaces Parts 3-4)** — 1,860★, pushed 2026-11-14 | Compose UDF: `@Composable` presenters, type-safe navigation, retained state |
+| [orbit-mvi/orbit-mvi](https://github.com/orbit-mvi/orbit-mvi) | **Adopt (replaces Parts 3-4)** — 1,346★, pushed 2026-08-31 | MVI container, lifecycle-safe collection, test DSL |
+| [skydoves/sandwich](https://github.com/skydoves/sandwich) | **Adopt (orthogonal)** — 1,779★, pushed 2026-11-14 | Sealed `ApiResponse` for Retrofit and Ktor |
+| [sqlcipher/sqlcipher-android](https://github.com/sqlcipher/sqlcipher-android) | **Adopt** — 281★, pushed 2026-10-27 | AES-256 encrypted SQLite; `SupportOpenHelperFactory` for Room |
+| [raamcosta/compose-destinations](https://github.com/raamcosta/compose-destinations) | **Skip on new apps** — 3,386★, pushed 2025-10-12 | Built for Nav 2; Navigation 3 already gives type-safe NavKeys |
+
+Circuit and Orbit are not add-ons - each replaces the ViewModel, navigation and testing story of this playbook. Pick one or neither. SQLCipher is the only reasonable way to encrypt Room at rest; key management stays yours (Android Keystore, never hardcoded).
+
+## 39 · Blueprints to read, not copy
+
+| Repository | Status | Read it for |
+|---|---|---|
+| [JunkFood02/Seal](https://github.com/JunkFood02/Seal) | **Blueprint** — 30,656★, pushed 2026-09-25 | Wrapping a CLI binary and managing a download queue |
+| [skydoves/Pokedex](https://github.com/skydoves/Pokedex) | **Blueprint** — 8,387★, pushed 2026-10-31 | Hilt + Room + Retrofit + Flow MVVM |
+| [Pool-Of-Tears/Myne](https://github.com/Pool-Of-Tears/Myne) | **Blueprint** — 1,546★, pushed 2026-09-21 | MVVM + Room ebook downloader |
+| [hieuwu/android-groceries-store](https://github.com/hieuwu/android-groceries-store) | **Blueprint** — 274★, pushed 2025-10-22 | Catalog and order flow with Supabase + Room + Hilt |
+| [tokn-authenticator/tokn](https://github.com/tokn-authenticator/tokn) | **Blueprint** — 94★, pushed 2026-11-13 | Keystore-backed secrets, QR scanning, encrypted backup |
+| [Ivorisnoob/OpenStream](https://github.com/Ivorisnoob/OpenStream) | **Blueprint** — 58★, pushed 2026-11-05 | Media3 ExoPlayer, PiP, subtitles, offline downloads |
+
+---
+
+## Corrections from this batch
+
+| Cited | Reality | Replacement |
+|---|---|---|
+| `dionsegijn/Konfetti` | **404** | `DanielMartinus/Konfetti` (3,394★, 2026-11-04) |
+| `skydoves/Orchestra` | Alive but untouched since **2023-01-02** | `skydoves/Balloon` for tooltips; write the rest |
+| `raamcosta/compose-destinations` | 13 months stale and superseded by Navigation 3 | Nav 3 `NavKey` + `NavDisplay` (playbook Part 4.4) |
+| `ThalzeronLabs/compose-bottom-sheets`, `Bomsamdi/top_sheet`, `nsozturk/quick-filter-kotlin` | 0 stars, weeks old | Read them; do not depend on them yet |
+
+Two claims were true but **only visible in the repository tree**: WormaCeptor's 44 MCP tools and LeakCanary's `.claude/skills/shark-dive/` skill. A README is a summary, not an inventory.

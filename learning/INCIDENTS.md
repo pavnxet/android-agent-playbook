@@ -68,3 +68,13 @@ It looked like an unverifiable claim.
 **Fix**: registry genre 24 records it as verified *in the source tree*, and the entry says so explicitly.
 **Lesson**: absence in a README is not absence in a repository. Before contradicting a claim, check the
 source tree - and check the project layout before concluding a file is missing.
+
+## INCIDENT-008 · Two true claims invisible to a README · 2026-11-14 · SEV-4 (process, positive)
+**What happened**: `wormaceptor/WormaCeptor` was claimed to expose "44 MCP tools" and
+`square/leakcanary` to ship a `shark-dive` agent skill. Neither is in the respective READMEs.
+**Investigation**: README grep found 44 tools for WormaCeptor; the LeakCanary README mentions neither
+shark-dive nor skills, but the tree contains `.claude/skills/shark-dive/SKILL.md`,
+`docs/shark-dive-reference.md` and two shark-dive release workflows.
+**Fix**: both recorded as verified, with the note that the evidence is the tree.
+**Lesson**: the second instance in one week (see INCIDENT-007). README-first verification produces
+false negatives; always list the tree for a claim about tooling or agent integration.

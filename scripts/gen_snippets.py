@@ -49,6 +49,7 @@ TITLES = [
     "Official template ViewModel",
     "Feature recipe prompt",
     "Extended genre prompt",
+    "Debug-only inspection wiring",
     "AGENTS.md single-module template",
     "AGENTS.md multi-module template",
 ]

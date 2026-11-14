@@ -100,3 +100,18 @@ schema, and OCR/AI/sync/PDF cross-reference existing entries.
 **Why**: a 25-row table invites an agent to add 25 dependencies; a cluster table invites it to add the
 two that matter. **Cost**: the reader must follow cross-references. **Guard**: the offline-first rules
 in Part 18.3 outrank any library choice.
+
+## ADR-015 · Inspectors are debug-only, and that is a security rule · ACCEPTED 2026-11-14
+WormaCeptor, Chucker and LeakCanary are `debugImplementation` only, with no-op artefacts in release and
+any local port or MCP endpoint bound to localhost.
+**Why**: an inspector exposes HTTP payloads, Room tables and DataStore contents over a local endpoint.
+In a release build that is a data-exfiltration surface carrying this app's package name.
+**Cost**: release builds need the no-op variants and cannot be inspected in the field.
+**Guard**: the dependency block in Part 19.1 is the canonical wiring; review any PR that adds an
+`implementation` inspector.
+
+## ADR-016 · Circuit and Orbit are replacements, not add-ons · ACCEPTED 2026-11-14
+The registry marks both as "replaces Parts 3-4" and forbids stacking them on this playbook's
+ViewModel + StateFlow + NavKey pattern.
+**Why**: each ships its own presenter/ViewModel, navigation and test story; running both produces two
+sources of truth for screen state. **Cost**: adopting one is a project-level decision, not a dependency.
