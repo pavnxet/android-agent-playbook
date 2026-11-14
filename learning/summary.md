@@ -39,3 +39,10 @@ the author's swipe-deck library is archived as well. Extended `docs/FEATURE_RECI
 with status labels and a dead-links table; added playbook Part 17 (38 pages, 22 snippet blocks);
 recorded ADR-013 and INCIDENT-006.
 next: re-verify the whole registry quarterly; the archived list will grow.
+
+## S-20261114-0007 · DONE · study-app cluster
+Verified 13 new repositories for 25 study-app genres: all alive, four claims corrected (book-story has
+six formats not seven; notate is e-ink-first; azri is a 1-star but real FSRS-6 implementation;
+Coding-Meet stale since 2025-08), and one claim confirmed only by reading the source tree (focuslock).
+Registry now 33 genres; playbook 40 pages, 18 parts. ADR-014, INCIDENT-007 logged.
+next: re-verify quarterly; Room 3.x migration is the next real decision.

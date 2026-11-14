@@ -58,3 +58,13 @@ playbook Part 17 documents the six; replacements are `saket/swipe` + `AnchoredDr
 `mapsforge/mapsforge` and `android/platform-samples/samples/location`.
 **Lesson**: a 13,000-star repository can be dead. Stars measure history; `archived` and `pushed_at`
 measure health. Check both before recommending anything.
+
+## INCIDENT-007 · A true claim I nearly marked false · 2026-11-14 · SEV-4 (process)
+**What happened**: `dhruv4740/focuslock` has no README describing UsageStatsManager, AccessibilityService
+or overlay blocking, and the manifest path I first probed did not exist (`app/` rather than `android/`).
+It looked like an unverifiable claim.
+**Investigation**: listed the repository tree - `FocusAccessibilityService`, `OnDemandAccessibility`,
+`UsageMonitorService`, `SurfaceBlocker`. The claim is accurate.
+**Fix**: registry genre 24 records it as verified *in the source tree*, and the entry says so explicitly.
+**Lesson**: absence in a README is not absence in a repository. Before contradicting a claim, check the
+source tree - and check the project layout before concluding a file is missing.

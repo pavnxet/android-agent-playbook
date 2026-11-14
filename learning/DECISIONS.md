@@ -92,3 +92,11 @@ labelled Adopt / Adopt (alternative) / Reference only / Archived / Platform / Do
 archived author library), and a bare list cannot express that. **Cost**: two files to update per
 change (registry + Part 16/17). **Guard**: the "Dead links and replacements" table plus the
 one-line `gh api` re-verification command in the registry.
+
+## ADR-014 · Study-app genres are clusters, not libraries · ACCEPTED 2026-11-14
+The 25 study genres are grouped into 13 clusters in `docs/FEATURE_RECIPES.md` (genres 21-33) and
+playbook Part 18, and five clusters deliberately have **no library**: MCQ/PYQ/error-log is a Room
+schema, and OCR/AI/sync/PDF cross-reference existing entries.
+**Why**: a 25-row table invites an agent to add 25 dependencies; a cluster table invites it to add the
+two that matter. **Cost**: the reader must follow cross-references. **Guard**: the offline-first rules
+in Part 18.3 outrank any library choice.

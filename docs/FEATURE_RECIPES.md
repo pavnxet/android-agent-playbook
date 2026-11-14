@@ -1,6 +1,6 @@
 # Feature recipes: capability → verified library
 
-The lookup table an agent should read **before** writing a feature. Twenty genres, one repository per genre, with the status checked on 14 November 2026 and the Android APIs each one actually uses.
+The lookup table an agent should read **before** writing a feature. Twenty genres plus a study-app cluster, one repository per genre, with the status checked on 14 November 2026 and the Android APIs each one actually uses.
 
 **How to use this file.** Name the capability, then read only that repository's entry. If the entry says *reference only* or *archived*, read it for the pattern and write the code yourself against the current API — do not add it as a dependency.
 
@@ -243,3 +243,114 @@ gh api repos/OWNER/REPO --jq '"\(.stargazers_count)★ \(.pushed_at[0:10]) archi
 | `android/location-samples` | Archived 2023-08 | `android/platform-samples/samples/location` |
 
 **Why this table exists**: a 13,000-star repository can be dead. Stars measure history, not health — `archived` and `pushed_at` measure health.
+
+---
+
+# Study and EdTech genres
+
+Twenty-five study-app genres collapse into thirteen clusters, mapped to 18 repositories. Five of them already appear above (`compose-to-pdf`, `googlesamples/mlkit`, `android/ai-samples`, `supabase-community/supabase-kt`, `android/architecture-templates`) and are cross-referenced rather than repeated.
+
+**The spine is the same for all of them**: Room is the source of truth, the UI observes Room, the network is an optional writer. See playbook Part 18.3.
+
+## 21 · Flashcards and spaced repetition
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [bootuz/azri-android](https://github.com/bootuz/azri-android) | **Reference only** — 1★, pushed 2026-10-21, AGP 9.2.1 | A real FSRS-6 implementation, nested deck folders, reverse cards, daily queues. One star, so read the algorithm, do not inherit the app |
+| [jvsena42/loopky](https://github.com/jvsena42/loopky) | **Reference only** — 12★, pushed 2026-11-12 | Anki `.apkg` and `.csv` import, Again/Hard/Good/Easy intervals, pronunciation checks, two-pane tablet layout |
+
+FSRS state is the one thing you cannot recompute: persist the review log in Room and derive scheduling from it.
+
+## 22 · MCQ simulators, PYQ banks, error logbooks
+
+No library needed. This is a Room schema plus a timer:
+
+- `question(id, topic, difficulty, negativeMark, sourceYear, bodyJson)` — `kotlinx.serialization` for options and explanation
+- `attempt(questionId, chosenOption, correct, secondsSpent, markedForReview, timestamp)`
+- `errorLog(questionId, reason, revisionDue)` — filtered views for "wrong", "unattempted", "silly mistake"
+- One `StateFlow<TestUiState>` per test session, a `Channel` for the submit effect, and a `SavedStateHandle` so a killed process does not lose the attempt.
+
+## 23 · Pomodoro, focus analytics, habits
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [nsh07/Tomato](https://github.com/nsh07/Tomato) | **Adopt as reference** — 1,539★, pushed 2026-11-13 | Material 3 Expressive UI, Room 3.0.3, Vico 3.3.1 charts, peak-hour analytics, Android 16 Live Updates |
+
+Note the forward signal: Tomato runs **Room 3.0.3** while the playbook baseline pins 2.8.3. Both work; plan the migration.
+
+## 24 · App and distraction blocking
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [dhruv4740/focuslock](https://github.com/dhruv4740/focuslock) | **Reference only** — 0★, pushed 2026-11-09 | `FocusAccessibilityService`, `UsageMonitorService` (UsageStatsManager), `SurfaceBlocker` overlay, friction gates. Verified in the source tree, not the README |
+
+Permissions: `PACKAGE_USAGE_STATS` (special access), `SYSTEM_ALERT_WINDOW`, and an accessibility service the user must enable manually. Play scrutinises accessibility use — declare a genuine purpose or expect removal.
+
+## 25 · Stylus notes and infinite canvas
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [allient/folio](https://github.com/allient/folio) | **Adopt as reference** — 16★, pushed 2026-11-11 | Pressure and tilt brushes, 35 paper templates, minimap, lasso-to-text, side-by-side book + notebook |
+| [alexdremov/notate](https://github.com/alexdremov/notate) | **Reference only** — 63★, pushed 2026-08-29 | Quadtree stroke indexing, level-of-detail tile caching, shape snapping, scribble-to-erase. Built for **Onyx Boox e-ink** devices — read it for the canvas, not the input model |
+
+## 26 · PDF and EPUB reading, annotation
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [Acclorite/book-story](https://github.com/Acclorite/book-story) | **Adopt as reference** — 1,428★, pushed 2026-11-05 | Material You reader, **six** formats (pdf, epub, fb2, html, md, txt), chapters, categories, SAF |
+
+Six formats, not seven: there is no `.mobi` or `.azw3` support to promise.
+
+## 27 · YouTube lecture chapters
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [PierfrancescoSoffritti/android-youtube-player](https://github.com/PierfrancescoSoffritti/android-youtube-player) | **Adopt** — 3,704★, pushed 2026-11-13 | IFrame wrapper with `seekTo(seconds)`; host it in an `AndroidView` and drive chapter jumps from your UiState |
+
+Keep the timestamp index in Room (`chapter(videoId, startSec, title, questionId)`) so a tap on a chapter or an MCQ jumps straight to the second.
+
+## 28 · Lecture recording and offline speech-to-text
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [vilassn/whisper_android](https://github.com/vilassn/whisper_android) | **Adopt as reference** — 693★, pushed 2026-03-18 | Whisper over TFLite, WAV capture, Compose waveform |
+| [shaikmohammed8/LocalMind](https://github.com/shaikmohammed8/LocalMind) | **Reference only** — 5★, pushed 2026-01-15 | The `ggml` JNI path — smaller binary, faster on modern CPUs, more build complexity |
+
+Run transcription as WorkManager work with a foreground notification. A 40-minute lecture does not belong in a ViewModel coroutine.
+
+## 29 · LaTeX maths and formula handbooks
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [huarangmeng/latex](https://github.com/huarangmeng/latex) | **Adopt** — 135★, pushed 2026-11-13 | Pure Compose/KMP parser and renderer: `Latex` and `LatexAutoWrap` composables, fractions, integrals, limits, matrices, chemical formulas, KaTeX metrics, no WebView |
+
+Pairs with `jksalcedo/compose-to-pdf` (genre 1): one rendering path for screen and A4 paper.
+
+## 30 · Text-to-speech readers
+
+| Repository | Status | Take from it |
+|---|---|---|
+| [nedmah/TextLector](https://github.com/nedmah/TextLector) | **Adopt as reference** — 15★, pushed 2026-06-01 | Offline TTS for PDF/EPUB/TXT, paragraph-synchronised highlighting, 0.5x–2.0x, system voices or sherpa-onnx Piper |
+| [Coding-Meet/TextToSpeech-CMP](https://github.com/Coding-Meet/TextToSpeech-CMP) | **Reference only** — 47★, no push since 2025-08-19 | The clearest word-by-word highlight technique with pause/resume position tracking |
+
+## 31 · Book OCR and AI doubt solving
+
+Cross-reference: **genre 20** (`googlesamples/mlkit` for Latin/Devanagari OCR with CameraX) and **genre 10** (`android/ai-samples` for Gemini Nano on-device summarization and grounded answers).
+
+## 32 · Daily quiz feed and peer study rooms
+
+Cross-reference: **genre 17** (`supabase-community/supabase-kt`) — PostgREST for the quiz feed, Realtime channels for leaderboards and shared rooms.
+
+## 33 · Export study material to PDF
+
+Cross-reference: **genre 1** (`jksalcedo/compose-to-pdf`).
+
+---
+
+## Study-app rules that outrank the library choice
+
+1. **Room is the truth.** Decks, review logs, PYQs, attempts, error entries, timer sessions, highlights and transcripts all live in Room; the UI never waits on a socket.
+2. **The network is an optional writer.** Supabase or WorkManager push and pull in the background, then write back into Room.
+3. **Long work is WorkManager work.** Transcription, OCR of a chapter and PDF export run with a foreground notification, not in a ViewModel coroutine.
+4. **Conflicts are decided once.** Single-user study app: last-write-wins on a server timestamp, documented in `learning/DECISIONS.md`.
+5. **Never lose FSRS state.** The review log is durable; the scheduler is derived.

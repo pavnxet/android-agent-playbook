@@ -32,8 +32,8 @@ Layer 1 alone makes an agent write correct Android. Layer 2 makes it remember, a
 | [`templates/AGENTS.md`](templates/AGENTS.md) | **Default.** A 1–4 screen Android app. Single module, package-by-layer, ready to drop in a repo root. |
 | [`templates/AGENTS_multimodule.md`](templates/AGENTS_multimodule.md) | You have crossed 4–5 features and need the `:core:*` / `:feature:*:api|impl` graph. |
 | [`docs/CODE_SNIPPETS.md`](docs/CODE_SNIPPETS.md) | Your agent needs exact code: version catalog, `gradle.properties`, ViewModel + `UiState`, Hilt, Nav 3, Room repository, signing, R8, tests, CI YAML. |
-| [`docs/FEATURE_RECIPES.md`](docs/FEATURE_RECIPES.md) | Your agent is about to add a capability or genre (PDF export, camera, upload, QR, AI, media, charts, maps, widgets, BLE/USB, swipe, passkeys, animation, billing, OCR). **20 genres**, one verified repository each, with status and permission cost. |
-| [`docs/Android_Engineering_Playbook.pdf`](docs/Android_Engineering_Playbook.pdf) | The full manual: 17 parts, 3 appendices, 38 pages. |
+| [`docs/FEATURE_RECIPES.md`](docs/FEATURE_RECIPES.md) | Your agent is about to add a capability or genre (PDF export, camera, upload, QR, AI, media, charts, maps, widgets, BLE/USB, swipe, passkeys, animation, billing, OCR). **20 genres + 25 study-app genres**, one verified repository each, with status and permission cost. |
+| [`docs/Android_Engineering_Playbook.pdf`](docs/Android_Engineering_Playbook.pdf) | The full manual: 18 parts, 3 appendices, 40 pages. |
 | [`docs/Android_Engineering_Playbook.docx`](docs/Android_Engineering_Playbook.docx) | You want to edit or extend the manual. |
 | [`AGENTS.md`](AGENTS.md) | The protocol an agent follows **in this repository**: memory tiers, safety invariants, git rules, Project Profile (§12). |
 | [`learning/`](learning/BRIEF.md) | Cold-start memory: `BRIEF.md` (read first), `DECISIONS.md` (ADRs), `PLAYBOOKS.md` (recipes), `INCIDENTS.md` (postmortems), `learning.md`, `TOOLS.md`, `summary.md`. |
