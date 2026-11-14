@@ -99,3 +99,15 @@ Archived / Platform / Does not exist - and a capability index plus a permission-
 added on top. Nothing was regressed to satisfy the brief's wording.
 **Lesson**: "create file X with content Y" can be a request to regress. When the file already exists
 and is more accurate than the spec, improve it in place and say what you declined to change.
+
+## INCIDENT-011 · AGP 9 hard-fails on org.jetbrains.kotlin.android · 2026-11-14 · SEV-2 (build blocked)
+**What happened**: the first `verify-starter` run died in 45s with
+`Failed to apply plugin 'org.jetbrains.kotlin.android' - no longer required for Kotlin support since
+AGP 9.0`. The playbook's own Part 6 convention-plugin example applied exactly that plugin.
+**Investigation**: Now in Android's plugin catalog on AGP 9.3.2 carries no `kotlin-android` entry at
+all; only `org.jetbrains.kotlin.plugin.compose`, `kotlin-jvm`, `kotlin-serialization`, ksp and hilt.
+The `KotlinAndroidProjectExtension` still exists because AGP registers it.
+**Fix**: removed from the starter (root, module, catalog) and the build went green; Part 6.1/6.2
+corrected and a new Part 6.6 documents the rule with the verbatim error.
+**Lesson**: a starter that compiles is worth more than a version table. This contradiction sat in the
+playbook for six revisions and only a real build found it.

@@ -38,6 +38,7 @@ TITLES = [
     "libs.versions.toml",
     "Convention plugin build-logic",
     "gradle.properties",
+    "Built-in Kotlin error on AGP 9",
     "Release signing build.gradle.kts",
     "R8 config analyser",
     "ViewModel unit test with Turbine",

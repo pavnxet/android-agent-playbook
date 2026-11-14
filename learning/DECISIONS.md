@@ -156,3 +156,9 @@ caught.
 **Why**: the starter README table names `ui/home/HomeUiState.kt`, which the old pattern read as a home
 directory and blocked the commit (same class of false positive as ADR-008).
 **Cost**: none. **Guard**: three regression cases in `scripts/verify_repo.py` (one negative, two positive).
+
+## ADR-022 · Built-in Kotlin replaces the kotlin-android plugin on AGP 9 · ACCEPTED 2026-11-14
+The version catalog and every module must not apply `org.jetbrains.kotlin.android`. Compose keeps
+`org.jetbrains.kotlin.plugin.compose`; JVM-only modules keep `org.jetbrains.kotlin.jvm`.
+**Why**: AGP 9 fails the build outright (INCIDENT-011). **Cost**: none - there is no replacement to
+apply. **Guard**: `starter/` is the compiled proof; if it builds, the wiring is right.

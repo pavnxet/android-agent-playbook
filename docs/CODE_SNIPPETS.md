@@ -19,20 +19,21 @@ Looking for a **library** rather than a snippet? See [FEATURE_RECIPES.md](FEATUR
 7. [libs.versions.toml](#libsversionstoml)
 8. [Convention plugin build-logic](#convention-plugin-build-logic)
 9. [gradle.properties](#gradleproperties)
-10. [Release signing build.gradle.kts](#release-signing-buildgradlekts)
-11. [R8 config analyser](#r8-config-analyser)
-12. [ViewModel unit test with Turbine](#viewmodel-unit-test-with-turbine)
-13. [Test and build commands](#test-and-build-commands)
-14. [Headless dev loop with adb](#headless-dev-loop-with-adb)
-15. [GitHub Actions pipeline](#github-actions-pipeline)
-16. [Capacitor web-to-APK](#capacitor-web-to-apk)
-17. [Official template package tree](#official-template-package-tree)
-18. [Official template ViewModel](#official-template-viewmodel)
-19. [Feature recipe prompt](#feature-recipe-prompt)
-20. [Extended genre prompt](#extended-genre-prompt)
-21. [Debug-only inspection wiring](#debug-only-inspection-wiring)
-22. [AGENTS.md single-module template](#agentsmd-single-module-template)
-23. [AGENTS.md multi-module template](#agentsmd-multi-module-template)
+10. [Built-in Kotlin error on AGP 9](#built-in-kotlin-error-on-agp-9)
+11. [Release signing build.gradle.kts](#release-signing-buildgradlekts)
+12. [R8 config analyser](#r8-config-analyser)
+13. [ViewModel unit test with Turbine](#viewmodel-unit-test-with-turbine)
+14. [Test and build commands](#test-and-build-commands)
+15. [Headless dev loop with adb](#headless-dev-loop-with-adb)
+16. [GitHub Actions pipeline](#github-actions-pipeline)
+17. [Capacitor web-to-APK](#capacitor-web-to-apk)
+18. [Official template package tree](#official-template-package-tree)
+19. [Official template ViewModel](#official-template-viewmodel)
+20. [Feature recipe prompt](#feature-recipe-prompt)
+21. [Extended genre prompt](#extended-genre-prompt)
+22. [Debug-only inspection wiring](#debug-only-inspection-wiring)
+23. [AGENTS.md single-module template](#agentsmd-single-module-template)
+24. [AGENTS.md multi-module template](#agentsmd-multi-module-template)
 
 ## Install the agent skills
 
@@ -207,7 +208,8 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+# AGP 9 has built-in Kotlin: do NOT declare org.jetbrains.kotlin.android
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ```
@@ -220,7 +222,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         with(pluginManager) {
             apply("com.android.library")
-            apply("org.jetbrains.kotlin.android")
+            // no kotlin-android: AGP 9 provides Kotlin itself (see 6.6)
         }
         extensions.configure<LibraryExtension> {
             compileSdk = 37
@@ -255,6 +257,14 @@ org.gradle.configuration-cache.problems=fail
 org.gradle.isolated-projects=true
 android.useAndroidX=true
 kotlin.code.style=official
+```
+
+## Built-in Kotlin error on AGP 9
+
+```kotlin
+> Failed to apply plugin 'org.jetbrains.kotlin.android'
+  The 'org.jetbrains.kotlin.android' plugin is no longer required for Kotlin support since AGP 9.0.
+  Solution: Remove the 'org.jetbrains.kotlin.android' plugin from this project's build file.
 ```
 
 ## Release signing build.gradle.kts

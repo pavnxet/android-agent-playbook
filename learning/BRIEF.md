@@ -17,6 +17,7 @@ snippets, and this memory/safety layer. Content verified 14 November 2026 agains
 - tooling: inspectors are debugImplementation only; a release inspector is a data-exfiltration surface (ADR-015) [area: security]
 - ci: verify action majors with `gh api repos/O/R/releases/latest`; stale pins fail slowly (ADR-017, INCIDENT-009) [area: ci]
 - android: AGP 9 hard-requires KSP >= 2.3.6 and Hilt >= 2.59.2; older versions fail the build [area: android-build]
+- android: AGP 9 FORBIDS org.jetbrains.kotlin.android - built-in Kotlin, plugin removed everywhere [area: android-build]
 - android: `NavHost` is Navigation 2; a 2026 stack uses `NavDisplay` + `@Serializable NavKey` [area: android-ui]
 - android: a ViewModel survives rotation, not process death - typed input needs `SavedStateHandle` [area: android-ui]
 - android: `-keep` rules are guessed until proven - run `:app:analyzeReleaseR8Config` first [area: android-release]

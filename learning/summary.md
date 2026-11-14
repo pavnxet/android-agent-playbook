@@ -70,3 +70,10 @@ pinned baseline with verify-starter.yml, a capability index and permission-hygie
 registry, README badges and map rows, template pointers, and installer support for FEATURE_RECIPES.md
 and PROMPTS.md. ADR-019/020 logged.
 next: keep starter and Part 2 in lockstep; the starter build is the proof that the matrix is real.
+
+## S-20261114-0011 · DONE · starter green + AGP 9 correction
+The starter's first CI run failed on AGP 9's built-in Kotlin (`kotlin-android` must not be applied).
+Fixed in the starter, and the same error corrected in the playbook: Part 6.1/6.2 fixed, new Part 6.6
+added with the verbatim failure. `verify-starter` is now green: testDebugUnitTest + assembleDebug on
+AGP 9.3.2 / Kotlin 2.3.0 / KSP 2.3.6 / Hilt 2.59.2 / compileSdk 37 / Nav3 1.2.0 / Room 2.8.3.
+INCIDENT-011, ADR-022 logged.
