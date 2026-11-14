@@ -1,0 +1,63 @@
+# ==========================================
+# Agent memory safety rule (do not modify)
+# ==========================================
+# learning/ is committed and pushed across branches. It must NEVER be ignored.
+!learning/
+!learning/**
+
+# ==========================================
+# Environment and secrets (never commit)
+# ==========================================
+.env
+.env.*
+!.env.example
+local.properties
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+
+# Android signing material - never commit
+*.jks
+*.keystore
+keystore.properties
+
+# ==========================================
+# Android build output
+# ==========================================
+build/
+.gradle/
+captures/
+*.apk
+*.aab
+*.hprof
+.cxx/
+
+# ==========================================
+# Python (safety tooling)
+# ==========================================
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# ==========================================
+# Node (only for the web-wrapper path)
+# ==========================================
+node_modules/
+
+# ==========================================
+# OS and editors
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/settings.json
+*.swp
+*.swo
+*~
